@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elementor MCP — Connect AI to WordPress</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --bg-sidebar: #000000;
+      --bg-card: #161622;
+      --bg-code: #0e0e1a;
+      --border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-muted: #8888aa;
+      --text-dim: #444444;
+      --accent: #1f1e58;
+      --accent-hover: #2a2870;
+      --accent-dim: rgba(31, 30, 88, 0.15);
+      --tag-bg: #0d2d35;
+      --tag-text: #5ad4e6;
+      --warn-bg: #1f1a0e;
+      --warn-border: #5a3e00;
+      --warn-text: #f0a500;
+      --sidebar-w: 260px;
+      --header-h: 56px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--bg-sidebar);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 32px;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    nav.top-nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    nav.top-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+    }
+
+    nav.top-nav a:hover { color: var(--text); background: var(--bg-card); }
+    nav.top-nav a.active { color: var(--text); background: var(--bg-card); }
+
+    .header-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: .3px;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex;
+      margin-top: var(--header-h);
+      min-height: calc(100vh - var(--header-h));
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      width: var(--sidebar-w);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: fixed;
+      top: var(--header-h);
+      bottom: 0;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar-group {
+      margin-bottom: 6px;
+    }
+
+    .sidebar-group-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: #ffffff;
+      padding: 10px 20px 6px;
+    }
+
+    aside a {
+      display: block;
+      padding: 7px 20px;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 13.5px;
+      border-left: 2px solid transparent;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+
+    aside a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,.05);
+    }
+
+    aside a.active {
+      color: #ffffff;
+      border-left-color: var(--accent);
+      background: var(--accent);
+    }
+
+    /* ── Main content ── */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 56px 64px 80px;
+      max-width: 880px;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -.5px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 650;
+      margin: 52px 0 16px;
+      padding-top: 52px;
+      border-top: 1px solid var(--border);
+      letter-spacing: -.2px;
+    }
+
+    h2:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 650;
+      margin: 28px 0 10px;
+      color: var(--text);
+    }
+
+    p { margin-bottom: 16px; color: #ccc; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .intro-text {
+      font-size: 17px;
+      color: #aaa;
+      margin-bottom: 36px;
+      line-height: 1.75;
+    }
+
+    /* ── Step badges ── */
+    .step {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 28px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-body { flex: 1; }
+    .step-body strong { display: block; margin-bottom: 6px; font-size: 15px; }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      overflow-x: auto;
+      margin: 14px 0 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: #c9d1d9;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e1e1e;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      padding: 10px 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+    }
+
+    .code-header + pre {
+      border-radius: 0 0 10px 10px;
+      margin-top: 0;
+    }
+
+    /* syntax highlight */
+    .kw { color: #ff7b72; }
+    .str { color: #a5d6ff; }
+    .cmt { color: #6e7681; font-style: italic; }
+    .key { color: #79c0ff; }
+    .val { color: #a5d6ff; }
+    .num { color: #f0883e; }
+    .fn { color: #d2a8ff; }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 22px 18px;
+      transition: border-color .2s;
+    }
+
+    .card:hover { border-color: #088c9e; }
+
+    .card-title {
+      font-weight: 650;
+      font-size: 15px;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: #ffffff;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .card-link {
+      font-size: 13px;
+      color: #ffffff;
+      text-decoration: underline;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── Callouts ── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .callout-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+    .callout.info {
+      background: rgba(7, 148, 127, .08);
+      border: 1px solid rgba(7, 148, 127, .28);
+      color: #7dd9c8;
+    }
+
+    .callout.warn {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      color: var(--warn-text);
+    }
+
+    .callout.tip {
+      background: rgba(8, 140, 158, .08);
+      border: 1px solid rgba(8, 140, 158, .28);
+      color: #80d4e0;
+    }
+
+    /* ── Comparison table ── */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .compare-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .compare-box.bad { border-color: #4a2020; }
+    .compare-box.good { border-color: #07947f; }
+
+    .compare-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .compare-box.bad .compare-label { color: #e05252; }
+    .compare-box.good .compare-label { color: #07947f; }
+
+    .compare-box p { font-size: 14px; color: #bbb; margin-bottom: 0; }
+
+    /* ── Badge tags ── */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: .3px;
+    }
+
+    .badge-green { background: var(--tag-bg); color: var(--tag-text); }
+    .badge-gray  { background: #222; color: #888; }
+    .badge-orange { background: #1f1a0e; color: #f0a500; }
+
+    /* ── Prereq list ── */
+    .prereq-list {
+      list-style: none;
+      margin: 12px 0 20px;
+    }
+
+    .prereq-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .prereq-list li:last-child { border-bottom: none; }
+
+    .check { color: var(--accent); font-size: 13px; flex-shrink: 0; }
+
+    /* ── Table of contents (right) ── */
+    .toc {
+      float: right;
+      width: 200px;
+      margin: 0 0 24px 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 12.5px;
+    }
+
+    .toc-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .toc a {
+      display: block;
+      color: var(--text-muted);
+      padding: 3px 0;
+      font-size: 12.5px;
+      text-decoration: none;
+    }
+
+    .toc a:hover { color: var(--text); }
+
+    /* ── Section divider ── */
+    .clearfix::after { content: ""; display: table; clear: both; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+    /* ── Hamburger button (mobile only) ── */
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      margin-left: auto;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform .25s, opacity .25s;
+    }
+
+    .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Sidebar overlay (mobile) ── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 98;
+      backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.visible { display: block; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      :root { --header-h: 52px; }
+
+      .menu-btn { display: flex; }
+
+      nav.top-nav { display: none; }
+
+      aside {
+        transform: translateX(-100%);
+        transition: transform .28s ease;
+        z-index: 99;
+        width: min(280px, 80vw);
+        border-right: 1px solid #222;
+      }
+
+      aside.open { transform: translateX(0); }
+
+      main {
+        margin-left: 0;
+        padding: 36px 20px 60px;
+        max-width: 100%;
+      }
+
+      h1 { font-size: 26px; }
+
+      h2 {
+        font-size: 19px;
+        margin: 40px 0 14px;
+        padding-top: 40px;
+      }
+
+      .intro-text { font-size: 15px; }
+
+      .toc { display: none; }
+
+      .compare {
+        grid-template-columns: 1fr;
+      }
+
+      pre {
+        font-size: 12px;
+        padding: 14px 16px;
+      }
+
+      .code-header { padding: 8px 16px; }
+
+      .step { gap: 14px; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 28px 16px 52px; }
+      h1 { font-size: 22px; }
+      h2 { font-size: 17px; }
+      .callout { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Sidebar overlay ── -->
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- ── Header ── -->
+<header>
+  <a class="logo" href="#">
+    <img src="images/logo_dark.png" alt="htw saar – Forschungsgruppe Verkehrstelematik" />
+  </a>
+  <nav class="top-nav">
+    <a href="#overview">Home</a>
+    <a href="#quickstart" class="active">Guides <span class="header-badge">MCP</span></a>
+    <a href="#install-plugins">Plugins</a>
+    <a href="#other-tools">Resources</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ── Layout ── -->
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside id="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Get started</div>
+      <a href="#overview" class="active">Overview</a>
+      <a href="#prerequisites">Prerequisites</a>
+      <a href="#quickstart">Quickstart</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Setup</div>
+      <a href="#install-plugins">Install plugins</a>
+      <a href="#app-password">Application password</a>
+      <a href="#generate-config">Generate config</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Connect your AI</div>
+      <a href="#antigravity">Antigravity</a>
+      <a href="#claude-code">Claude Code</a>
+      <a href="#other-tools">Other MCP tools</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Using Elementor MCP</div>
+      <a href="#prompting">Writing effective prompts</a>
+      <a href="#what-it-can-do">What AI can control</a>
+      <a href="#iterate">Iterating on results</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Security</div>
+      <a href="#security">Security considerations</a>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main>
+
+    <!-- ── Hero ── -->
+    <p style="font-size:12px; color: var(--text-dim); margin-bottom: 10px; letter-spacing:.3px;">GUIDES &nbsp;/&nbsp; ELEMENTOR MCP</p>
+    <h1>Connect AI to WordPress</h1>
+    <p class="intro-text">
+      Elementor MCP lets your AI directly control your WordPress site — creating pages, updating layouts,
+      swapping widgets, and rebuilding sections — without manual drag-and-drop. This guide walks you through
+      setup, configuration, and getting the most out of AI-driven page building.
+    </p>
+
+    <a href="https://youtu.be/tCRt5m4jsY8" target="_blank" rel="noopener" style="display:block; position:relative; border-radius:12px; overflow:hidden; border:1px solid var(--border); margin-bottom:8px; aspect-ratio:16/9; background:#000; text-decoration:none;">
+      <img
+        src="https://img.youtube.com/vi/tCRt5m4jsY8/maxresdefault.jpg"
+        alt="How I Use Elementor MCP + Claude Code to Create Custom Websites"
+        style="width:100%; height:100%; object-fit:cover; display:block; opacity:.85; transition:opacity .2s;"
+        onmouseover="this.style.opacity=1"
+        onmouseout="this.style.opacity='.85'"
+      />
+      <!-- play button -->
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; pointer-events:none;">
+        <div style="width:68px; height:68px; background:rgba(0,0,0,.75); border-radius:50%; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span style="color:#fff; font-size:13px; font-family:var(--font); letter-spacing:.3px; text-shadow:0 1px 4px rgba(0,0,0,.8);">Watch on YouTube</span>
+      </div>
+    </a>
+
+    <!-- ── Overview ── -->
+    <h2 id="overview">Overview</h2>
+
+    <div class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#overview">Overview</a>
+      <a href="#prerequisites">Prerequisites</a>
+      <a href="#install-plugins">Install plugins</a>
+      <a href="#app-password">Application password</a>
+      <a href="#generate-config">Generate config</a>
+      <a href="#antigravity">Antigravity setup</a>
+      <a href="#claude-code">Claude Code setup</a>
+      <a href="#prompting">Effective prompts</a>
+      <a href="#what-it-can-do">What AI can control</a>
+      <a href="#security">Security</a>
+    </div>
+
+    <div class="clearfix">
+      <p>
+        Standard AI integrations with Elementor are limited to generating copy or suggesting layout ideas. The output
+        is text — you still have to drag, drop, and wire everything yourself. <strong>Elementor MCP changes that.</strong>
+      </p>
+      <p>
+        MCP (Model Context Protocol) is an open standard that lets AI models call tools exposed by external servers.
+        With the Elementor MCP plugin, your AI client can directly invoke Elementor's builder — creating pages, moving
+        sections, updating widget settings, and applying styles — as structured API calls, not chat suggestions.
+      </p>
+
+      <div class="callout info">
+        <span class="callout-icon">◎</span>
+        <div>
+          <strong>What's new about this approach</strong><br />
+          Instead of copying AI-generated HTML into Elementor, your AI <em>controls Elementor directly</em>.
+          It can list pages, inspect structures, modify containers, and rebuild entire landing pages in a single
+          prompt session.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Prerequisites ── -->
+    <h2 id="prerequisites">Prerequisites</h2>
+    <p>Before you begin, make sure the following are in place on your WordPress site.</p>
+
+    <ul class="prereq-list">
+      <li><span class="check">✓</span> WordPress installed and accessible</li>
+      <li><span class="check">✓</span> Elementor (free) — Elementor Pro gives access to more widgets and templates</li>
+<li><span class="check">✓</span> An MCP-compatible AI client (Antigravity, Claude Code, or similar)</li>
+      <li><span class="check">✓</span> The MCP Adapter plugin <span class="badge badge-orange">Required dependency</span></li>
+      <li><span class="check">✓</span> The Elementor MCP plugin <span class="badge badge-green">Core plugin</span></li>
+    </ul>
+
+    <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 4px;">
+      <a href="https://github.com/msrbuilds/elementor-mcp" target="_blank" rel="noopener" style="text-decoration:none;">
+        <div class="card" style="height:100%;">
+          <div class="card-title" style="display:flex; align-items:center; gap:8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.7;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Elementor MCP Plugin
+          </div>
+          <div class="card-desc">The core MCP server plugin that exposes Elementor's builder to your AI client.</div>
+          <span class="card-link">msrbuilds/elementor-mcp ↗</span>
+        </div>
+      </a>
+      <a href="https://github.com/WordPress/mcp-adapter/releases" target="_blank" rel="noopener" style="text-decoration:none;">
+        <div class="card" style="height:100%;">
+          <div class="card-title" style="display:flex; align-items:center; gap:8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.7;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            WordPress MCP Connector
+          </div>
+          <div class="card-desc">Required adapter plugin — the dependency that bridges WordPress and any MCP client.</div>
+          <span class="card-link">WordPress/mcp-adapter ↗</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- ── Quickstart ── -->
+    <h2 id="quickstart">Quickstart</h2>
+    <p>The fastest path from zero to a working AI-controlled Elementor site:</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Install both plugins</strong>
+        Download and activate the <strong>MCP Adapter</strong> plugin first, then the <strong>Elementor MCP</strong> plugin from their GitHub Releases pages.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Create an application password</strong>
+        Go to <strong>Users → Profile</strong> in WordPress, scroll to Application Passwords, and generate one for your AI client.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Generate the MCP config</strong>
+        In <strong>Settings → EMCP Tools → Connection</strong>, click Generate Config and copy the connection string.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Paste into your AI client</strong>
+        Add the connection string to Antigravity, Claude Code, or any MCP-compatible client, then restart it.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Start building</strong>
+        Ask your AI to list pages or create a new landing page — Elementor MCP will handle the rest.
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <div>
+        Need more detail on any step? The sections below walk through each one in full.
+      </div>
+    </div>
+
+    <!-- ── Install plugins ── -->
+    <h2 id="install-plugins">Install plugins</h2>
+    <p>
+      Elementor MCP depends on the <strong>MCP Adapter plugin</strong>, so you must install that first.
+      Both are installed via your WordPress dashboard as uploaded ZIP files — they are not yet available
+      in the public plugin directory.
+    </p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Download both plugins from GitHub Releases</strong>
+        Download the <code>.zip</code> file for the MCP Adapter plugin and the Elementor MCP plugin from their
+        respective GitHub Releases pages. Keep both files ready.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Install MCP Adapter first</strong>
+        In your WordPress dashboard, go to <strong>Plugins → Add Plugin → Upload Plugin</strong>.
+        Select the MCP Adapter <code>.zip</code>, click Install Now, then Activate.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Install Elementor MCP</strong>
+        Repeat the upload step with the Elementor MCP <code>.zip</code>. Install and activate it.
+        You should now see an <strong>EMCP Tools</strong> entry under Settings.
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠</span>
+      <div>
+        Install the MCP Adapter <em>before</em> Elementor MCP. Activating Elementor MCP without the
+        adapter will result in a dependency error.
+      </div>
+    </div>
+
+    <!-- ── App password ── -->
+    <h2 id="app-password">Create an application password</h2>
+    <p>
+      Your AI client authenticates with WordPress using an <strong>Application Password</strong> — a scoped,
+      revocable credential that doesn't expose your main admin password.
+    </p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Open your WordPress user profile</strong>
+        Go to <strong>Users → Profile</strong> (or <em>Your Profile</em>).
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Scroll to Application Passwords</strong>
+        Enter a descriptive name (e.g. <code>Elementor MCP — Antigravity</code>) and click
+        <strong>Add New Application Password</strong>.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Copy the generated password</strong>
+        WordPress shows the password only once. Copy it immediately — you'll need it in the next step.
+      </div>
+    </div>
+
+    <!-- ── Generate config ── -->
+    <h2 id="generate-config">Generate the MCP config</h2>
+    <p>
+      With the application password ready, return to <strong>Settings → EMCP Tools</strong> and switch
+      to the <strong>Connection</strong> tab. Click <strong>Generate Config</strong>. This produces a
+      connection string you'll paste into your AI client.
+    </p>
+
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <div>
+        Keep the config tab open after generating. The connection string is shown only once — if you
+        navigate away, you'll need to regenerate a new one.
+      </div>
+    </div>
+
+    <!-- ── Antigravity ── -->
+    <h2 id="antigravity">Connect with Antigravity</h2>
+    <p>Antigravity has native MCP server support, making the connection straightforward.</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Copy the connection string</strong>
+        From the EMCP Tools config screen, copy the full connection string.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Add to Antigravity MCP servers</strong>
+        Open Antigravity → MCP Servers → Add Server, and paste the connection string.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Refresh and enable tools</strong>
+        Click Refresh. Antigravity will pull in the available Elementor MCP tools. You can enable or
+        disable individual tools from the tools panel.
+      </div>
+    </div>
+
+    <!-- ── Claude Code ── -->
+    <h2 id="claude-code">Connect with Claude Code</h2>
+    <p>
+      Claude Code reads MCP server definitions from a JSON config file. Paste the Elementor MCP config
+      into your <code>mcp_config.json</code> (or your project's <code>.claude/mcp.json</code>), then
+      restart the editor.
+    </p>
+
+    <div class="code-header">
+      <span>json &nbsp; ~/.claude/mcp_config.json</span>
+      <span style="cursor:pointer; opacity:.6;">copy</span>
+    </div>
+    <pre><code>{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"elementor-mcp"</span>: {
+      <span class="key">"command"</span>: <span class="str">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@elementor/mcp-server"</span>],
+      <span class="key">"env"</span>: {
+        <span class="key">"WP_URL"</span>: <span class="str">"https://your-site.com"</span>,
+        <span class="key">"WP_USER"</span>: <span class="str">"your-username"</span>,
+        <span class="key">"WP_APP_PASSWORD"</span>: <span class="str">"xxxx xxxx xxxx xxxx xxxx xxxx"</span>
+      }
+    }
+  }
+}</code></pre>
+
+    <p>After saving, restart Claude Code and run:</p>
+
+    <div class="code-header">
+      <span>bash</span>
+    </div>
+    <pre><code><span class="cmt"># Verify the MCP server is connected</span>
+/mcp list-tools elementor-mcp</code></pre>
+
+    <p>
+      Once connected, Claude Code can call any of the Elementor MCP tools — list pages, inspect layouts,
+      create containers, update widgets, and more.
+    </p>
+
+    <!-- ── Other tools ── -->
+    <h2 id="other-tools">Other MCP-compatible clients</h2>
+    <p>
+      Any tool that supports the Model Context Protocol can connect. The pattern is always the same:
+      add the MCP server config, restart the client, and confirm the tools load.
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Cursor</div>
+        <div class="card-desc">Add the config to <code>.cursor/mcp.json</code> in your project root.</div>
+        <span class="badge badge-green">MCP supported</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Windsurf</div>
+        <div class="card-desc">Use the MCP panel under Settings → AI Tools → Servers.</div>
+        <span class="badge badge-green">MCP supported</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Continue.dev</div>
+        <div class="card-desc">Add an MCP provider block in your <code>config.yaml</code>.</div>
+        <span class="badge badge-gray">Community</span>
+      </div>
+    </div>
+
+    <!-- ── What it can do ── -->
+    <h2 id="what-it-can-do">What AI can control</h2>
+    <p>Once connected, your AI has access to the full set of Elementor MCP tools:</p>
+
+    <div class="code-header">
+      <span>Available MCP tools</span>
+    </div>
+    <pre><code><span class="cmt"># Page operations</span>
+list-pages          <span class="cmt"># list all WordPress pages</span>
+create-page         <span class="cmt"># create a new page</span>
+get-page-structure  <span class="cmt"># inspect a page's element tree</span>
+delete-page-content <span class="cmt"># clear a page's content</span>
+
+<span class="cmt"># Layout</span>
+add-container       <span class="cmt"># add a flex/grid container</span>
+add-flexbox         <span class="cmt"># add a flexbox section</span>
+update-container    <span class="cmt"># update container settings</span>
+move-element        <span class="cmt"># reorder elements in the tree</span>
+duplicate-element   <span class="cmt"># duplicate any element</span>
+remove-element      <span class="cmt"># delete an element</span>
+
+<span class="cmt"># Widgets</span>
+add-heading         <span class="cmt"># insert a heading widget</span>
+add-text-editor     <span class="cmt"># insert a text/rich content block</span>
+add-image           <span class="cmt"># insert an image widget</span>
+add-button          <span class="cmt"># insert a CTA button</span>
+add-icon-box        <span class="cmt"># insert icon + text block</span>
+update-widget       <span class="cmt"># update widget settings by ID</span>
+find-element        <span class="cmt"># search for an element by type or content</span></code></pre>
+
+    <!-- ── Prompting ── -->
+    <h2 id="prompting">Writing effective prompts</h2>
+    <p>
+      The most common source of disappointment with AI page builders isn't the tool — it's the prompt.
+      A vague prompt forces the AI to guess the layout, hierarchy, spacing, and style all at once. The results
+      look generic because they are generic: the AI had no direction.
+    </p>
+
+    <h3>Simple vs. detailed prompts</h3>
+    <div class="compare">
+      <div class="compare-box bad">
+        <div class="compare-label">Too vague</div>
+        <p>
+          "Create a landing page for a web design agency."
+        </p>
+      </div>
+      <div class="compare-box good">
+        <div class="compare-label">Specific and directive</div>
+        <p>
+          "Build a landing page for a web design agency. Start with a full-width hero: left-aligned heading
+          ('We build websites that convert'), a subheading in gray, and a green CTA button. Below that,
+          a 3-column icon section showing our services. Then a testimonial row with a dark background.
+          Keep spacing generous — 80px section padding. No stock photography."
+        </p>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">◎</span>
+      <div>
+        <strong>The principle:</strong> AI follows direction well. It guesses layout poorly.
+        The more structure you define in the prompt, the closer the first draft is to something usable.
+      </div>
+    </div>
+
+    <h3>What to include in a layout prompt</h3>
+    <ul style="margin: 10px 0 20px 20px; color: #bbb; font-size: 14px; line-height: 2;">
+      <li>Section order and names (hero, services, testimonials, CTA)</li>
+      <li>Layout per section (1-column, 3-column grid, alternating image-text)</li>
+      <li>Heading copy or placeholder intent</li>
+      <li>Color guidance (dark background, accent color, text color)</li>
+      <li>Spacing preferences (compact, airy, generous)</li>
+      <li>What to exclude (no carousels, no video embeds, no stock images)</li>
+    </ul>
+
+    <!-- ── Iterate ── -->
+    <h2 id="iterate">Iterating on results</h2>
+    <p>
+      Don't judge the page from the first draft alone. Once the initial structure exists, keep directing
+      your AI rather than starting over. Use follow-up prompts to refine:
+    </p>
+
+    <div class="code-header">
+      <span>Example follow-up prompts</span>
+    </div>
+    <pre><code><span class="cmt"># Adjust spacing</span>
+"Increase the padding on the hero section to 120px top and bottom."
+
+<span class="cmt"># Swap a widget</span>
+"Replace the text block in the services section with three icon boxes."
+
+<span class="cmt"># Update copy</span>
+"Update the hero heading to: 'Strategy. Design. Growth.' in 52px."
+
+<span class="cmt"># Move sections</span>
+"Move the testimonials section above the pricing table."
+
+<span class="cmt"># Style a button</span>
+"Change the CTA button to a dark background with white text and 8px border radius."</code></pre>
+
+    <p>
+      Each of these maps directly to an Elementor MCP tool call. Your AI will call the right tool,
+      target the right element by ID, and apply the change — no manual clicking required.
+    </p>
+
+    <!-- ── Security ── -->
+    <h2 id="security">Security considerations</h2>
+    <p>
+      Giving AI direct write access to a live site introduces risks beyond cosmetic changes. Depending
+      on what you ask it to do, the AI can touch layouts, widget settings, embeds, custom JavaScript,
+      and HTML blocks. AI-generated code can introduce vulnerabilities — especially in custom code widgets.
+    </p>
+
+    <h3>Recommended precautions</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Use a staging site for initial testing</strong>
+        Run your first Elementor MCP sessions on a staging copy of your site, not production.
+        Most managed WordPress hosts offer one-click staging.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Install a security plugin</strong>
+        Use a plugin like MalCare, Wordfence, or Solid Security. Run a scan before and after any session
+        where the AI touched custom code, HTML embeds, or script widgets.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Review AI-generated custom code</strong>
+        If you ask the AI to insert a custom code widget or HTML block, review the output before publishing.
+        AI-generated JavaScript should be treated as untrusted until inspected.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Rotate the application password after testing</strong>
+        When a project is done or a session ends, revoke the application password from your WordPress profile
+        and generate a new one for the next session.
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠</span>
+      <div>
+        Application passwords grant API-level access to your site. Treat them like passwords:
+        don't commit them to version control, don't share them, and revoke them when no longer needed.
+      </div>
+    </div>
+
+    <div style="margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 13px; color: var(--text-dim);">
+      <span>Last updated: May 2026</span>
+      <a href="#" style="color: var(--text-muted);">Edit this page ↗</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ── Active sidebar link on scroll ──
+  const sections = document.querySelectorAll('h2[id], h3[id]');
+  const links = document.querySelectorAll('aside a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`aside a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ── Hamburger / sidebar drawer ──
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('visible');
+    menuBtn.classList.add('open');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('visible');
+    menuBtn.classList.remove('open');
+  }
+
+  menuBtn.addEventListener('click', () =>
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar()
+  );
+
+  overlay.addEventListener('click', closeSidebar);
+
+  // Set active immediately on click, then let scroll observer take over
+  sidebar.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      links.forEach(l => l.classList.remove('active'));
+      a.classList.add('active');
+      if (window.innerWidth <= 768) closeSidebar();
+    })
+  );
+
+  // Top nav active state on click
+  const topNavLinks = document.querySelectorAll('nav.top-nav a');
+  topNavLinks.forEach(a =>
+    a.addEventListener('click', () => {
+      topNavLinks.forEach(l => l.classList.remove('active'));
+      a.classList.add('active');
+    })
+  );
+</script>
+
+</body>
+</html>
