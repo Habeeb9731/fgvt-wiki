@@ -461,7 +461,6 @@
       border: none;
       cursor: pointer;
       padding: 6px;
-      margin-left: auto;
       flex-direction: column;
       gap: 5px;
     }
@@ -541,6 +540,36 @@
       .step { gap: 14px; }
     }
 
+    /* ── Language switcher ── */
+    .lang-switcher {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px;
+      flex-shrink: 0;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: .5px;
+      transition: color .15s, background .15s;
+      font-family: var(--font);
+    }
+
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:hover:not(.active) { color: var(--text); background: rgba(255,255,255,.08); }
+
     @media (max-width: 480px) {
       main { padding: 28px 16px 52px; }
       h1 { font-size: 22px; }
@@ -560,11 +589,15 @@
     <img src="images/logo_dark.png" alt="htw saar – Forschungsgruppe Verkehrstelematik" />
   </a>
   <nav class="top-nav">
-    <a href="#overview">Home</a>
-    <a href="#quickstart" class="active">Guides <span class="header-badge">MCP</span></a>
-    <a href="#install-plugins">Plugins</a>
-    <a href="#other-tools">Resources</a>
+    <a href="#overview" data-i18n="nav-home">Home</a>
+    <a href="#quickstart" class="active"><span data-i18n="nav-guides">Guides</span> <span class="header-badge">MCP</span></a>
+    <a href="#install-plugins" data-i18n="nav-plugins">Plugins</a>
+    <a href="#other-tools" data-i18n="nav-resources">Resources</a>
   </nav>
+  <div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+  </div>
   <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">
     <span></span><span></span><span></span>
   </button>
@@ -576,32 +609,32 @@
   <!-- ── Sidebar ── -->
   <aside id="sidebar">
     <div class="sidebar-group">
-      <div class="sidebar-group-label">Get started</div>
-      <a href="#overview" class="active">Overview</a>
-      <a href="#prerequisites">Prerequisites</a>
-      <a href="#quickstart">Quickstart</a>
+      <div class="sidebar-group-label" data-i18n="sg-getstarted">Get started</div>
+      <a href="#overview" class="active" data-i18n="sl-overview">Overview</a>
+      <a href="#prerequisites" data-i18n="sl-prerequisites">Prerequisites</a>
+      <a href="#quickstart" data-i18n="sl-quickstart">Quickstart</a>
     </div>
     <div class="sidebar-group">
-      <div class="sidebar-group-label">Setup</div>
-      <a href="#install-plugins">Install plugins</a>
-      <a href="#app-password">Application password</a>
-      <a href="#generate-config">Generate config</a>
+      <div class="sidebar-group-label" data-i18n="sg-setup">Setup</div>
+      <a href="#install-plugins" data-i18n="sl-install">Install plugins</a>
+      <a href="#app-password" data-i18n="sl-apppassword">Application password</a>
+      <a href="#generate-config" data-i18n="sl-genconfig">Generate config</a>
     </div>
     <div class="sidebar-group">
-      <div class="sidebar-group-label">Connect your AI</div>
-      <a href="#antigravity">Antigravity</a>
-      <a href="#claude-code">Claude Code</a>
-      <a href="#other-tools">Other MCP tools</a>
+      <div class="sidebar-group-label" data-i18n="sg-connectai">Connect your AI</div>
+      <a href="#antigravity" data-i18n="sl-antigravity">Antigravity</a>
+      <a href="#claude-code" data-i18n="sl-claudecode">Claude Code</a>
+      <a href="#other-tools" data-i18n="sl-othertools">Other MCP tools</a>
     </div>
     <div class="sidebar-group">
-      <div class="sidebar-group-label">Using Elementor MCP</div>
-      <a href="#prompting">Writing effective prompts</a>
-      <a href="#what-it-can-do">What AI can control</a>
-      <a href="#iterate">Iterating on results</a>
+      <div class="sidebar-group-label" data-i18n="sg-using">Using Elementor MCP</div>
+      <a href="#prompting" data-i18n="sl-prompting">Writing effective prompts</a>
+      <a href="#what-it-can-do" data-i18n="sl-whatitcando">What AI can control</a>
+      <a href="#iterate" data-i18n="sl-iterate">Iterating on results</a>
     </div>
     <div class="sidebar-group">
-      <div class="sidebar-group-label">Security</div>
-      <a href="#security">Security considerations</a>
+      <div class="sidebar-group-label" data-i18n="sg-security">Security</div>
+      <a href="#security" data-i18n="sl-security">Security considerations</a>
     </div>
   </aside>
 
@@ -609,9 +642,9 @@
   <main>
 
     <!-- ── Hero ── -->
-    <p style="font-size:12px; color: var(--text-dim); margin-bottom: 10px; letter-spacing:.3px;">GUIDES &nbsp;/&nbsp; ELEMENTOR MCP</p>
-    <h1>Connect AI to WordPress</h1>
-    <p class="intro-text">
+    <p style="font-size:12px; color: var(--text-dim); margin-bottom: 10px; letter-spacing:.3px;" data-i18n="hero-breadcrumb">GUIDES &nbsp;/&nbsp; ELEMENTOR MCP</p>
+    <h1 data-i18n="hero-title">Connect AI to WordPress</h1>
+    <p class="intro-text" data-i18n="hero-intro">
       Elementor MCP lets your AI directly control your WordPress site — creating pages, updating layouts,
       swapping widgets, and rebuilding sections — without manual drag-and-drop. This guide walks you through
       setup, configuration, and getting the most out of AI-driven page building.
@@ -630,33 +663,33 @@
         <div style="width:68px; height:68px; background:rgba(0,0,0,.75); border-radius:50%; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M8 5v14l11-7z"/></svg>
         </div>
-        <span style="color:#fff; font-size:13px; font-family:var(--font); letter-spacing:.3px; text-shadow:0 1px 4px rgba(0,0,0,.8);">Watch on YouTube</span>
+        <span style="color:#fff; font-size:13px; font-family:var(--font); letter-spacing:.3px; text-shadow:0 1px 4px rgba(0,0,0,.8);" data-i18n="hero-watch">Watch on YouTube</span>
       </div>
     </a>
 
     <!-- ── Overview ── -->
-    <h2 id="overview">Overview</h2>
+    <h2 id="overview" data-i18n="h2-overview">Overview</h2>
 
     <div class="toc">
-      <div class="toc-title">On this page</div>
-      <a href="#overview">Overview</a>
-      <a href="#prerequisites">Prerequisites</a>
-      <a href="#install-plugins">Install plugins</a>
-      <a href="#app-password">Application password</a>
-      <a href="#generate-config">Generate config</a>
-      <a href="#antigravity">Antigravity setup</a>
-      <a href="#claude-code">Claude Code setup</a>
-      <a href="#prompting">Effective prompts</a>
-      <a href="#what-it-can-do">What AI can control</a>
-      <a href="#security">Security</a>
+      <div class="toc-title" data-i18n="toc-title">On this page</div>
+      <a href="#overview" data-i18n="toc-overview">Overview</a>
+      <a href="#prerequisites" data-i18n="toc-prerequisites">Prerequisites</a>
+      <a href="#install-plugins" data-i18n="toc-install">Install plugins</a>
+      <a href="#app-password" data-i18n="toc-apppassword">Application password</a>
+      <a href="#generate-config" data-i18n="toc-genconfig">Generate config</a>
+      <a href="#antigravity" data-i18n="toc-antigravity">Antigravity setup</a>
+      <a href="#claude-code" data-i18n="toc-claudecode">Claude Code setup</a>
+      <a href="#prompting" data-i18n="toc-prompting">Effective prompts</a>
+      <a href="#what-it-can-do" data-i18n="toc-whatitcando">What AI can control</a>
+      <a href="#security" data-i18n="toc-security">Security</a>
     </div>
 
     <div class="clearfix">
-      <p>
+      <p data-i18n="overview-p1">
         Standard AI integrations with Elementor are limited to generating copy or suggesting layout ideas. The output
         is text — you still have to drag, drop, and wire everything yourself. <strong>Elementor MCP changes that.</strong>
       </p>
-      <p>
+      <p data-i18n="overview-p2">
         MCP (Model Context Protocol) is an open standard that lets AI models call tools exposed by external servers.
         With the Elementor MCP plugin, your AI client can directly invoke Elementor's builder — creating pages, moving
         sections, updating widget settings, and applying styles — as structured API calls, not chat suggestions.
@@ -664,7 +697,7 @@
 
       <div class="callout info">
         <span class="callout-icon">◎</span>
-        <div>
+        <div data-i18n="overview-callout">
           <strong>What's new about this approach</strong><br />
           Instead of copying AI-generated HTML into Elementor, your AI <em>controls Elementor directly</em>.
           It can list pages, inspect structures, modify containers, and rebuild entire landing pages in a single
@@ -674,15 +707,15 @@
     </div>
 
     <!-- ── Prerequisites ── -->
-    <h2 id="prerequisites">Prerequisites</h2>
-    <p>Before you begin, make sure the following are in place on your WordPress site.</p>
+    <h2 id="prerequisites" data-i18n="h2-prerequisites">Prerequisites</h2>
+    <p data-i18n="prerequisites-intro">Before you begin, make sure the following are in place on your WordPress site.</p>
 
     <ul class="prereq-list">
-      <li><span class="check">✓</span> WordPress installed and accessible</li>
-      <li><span class="check">✓</span> Elementor (free) — Elementor Pro gives access to more widgets and templates</li>
-<li><span class="check">✓</span> An MCP-compatible AI client (Antigravity, Claude Code, or similar)</li>
-      <li><span class="check">✓</span> The MCP Adapter plugin <span class="badge badge-orange">Required dependency</span></li>
-      <li><span class="check">✓</span> The Elementor MCP plugin <span class="badge badge-green">Core plugin</span></li>
+      <li><span class="check">✓</span> <span data-i18n="prereq-1">WordPress installed and accessible</span></li>
+      <li><span class="check">✓</span> <span data-i18n="prereq-2">Elementor (free) — Elementor Pro gives access to more widgets and templates</span></li>
+      <li><span class="check">✓</span> <span data-i18n="prereq-3">An MCP-compatible AI client (Antigravity, Claude Code, or similar)</span></li>
+      <li><span class="check">✓</span> <span data-i18n="prereq-4">The MCP Adapter plugin</span> <span class="badge badge-orange">Required dependency</span></li>
+      <li><span class="check">✓</span> <span data-i18n="prereq-5">The Elementor MCP plugin</span> <span class="badge badge-green">Core plugin</span></li>
     </ul>
 
     <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 4px;">
@@ -690,9 +723,9 @@
         <div class="card" style="height:100%;">
           <div class="card-title" style="display:flex; align-items:center; gap:8px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.7;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            Elementor MCP Plugin
+            <span data-i18n="card-elementor-title">Elementor MCP Plugin</span>
           </div>
-          <div class="card-desc">The core MCP server plugin that exposes Elementor's builder to your AI client.</div>
+          <div class="card-desc" data-i18n="card-elementor-desc">The core MCP server plugin that exposes Elementor's builder to your AI client.</div>
           <span class="card-link">msrbuilds/elementor-mcp ↗</span>
         </div>
       </a>
@@ -700,68 +733,66 @@
         <div class="card" style="height:100%;">
           <div class="card-title" style="display:flex; align-items:center; gap:8px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.7;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            WordPress MCP Connector
+            <span data-i18n="card-wp-title">WordPress MCP Connector</span>
           </div>
-          <div class="card-desc">Required adapter plugin — the dependency that bridges WordPress and any MCP client.</div>
+          <div class="card-desc" data-i18n="card-wp-desc">Required adapter plugin — the dependency that bridges WordPress and any MCP client.</div>
           <span class="card-link">WordPress/mcp-adapter ↗</span>
         </div>
       </a>
     </div>
 
     <!-- ── Quickstart ── -->
-    <h2 id="quickstart">Quickstart</h2>
-    <p>The fastest path from zero to a working AI-controlled Elementor site:</p>
+    <h2 id="quickstart" data-i18n="h2-quickstart">Quickstart</h2>
+    <p data-i18n="quickstart-intro">The fastest path from zero to a working AI-controlled Elementor site:</p>
 
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <strong>Install both plugins</strong>
-        Download and activate the <strong>MCP Adapter</strong> plugin first, then the <strong>Elementor MCP</strong> plugin from their GitHub Releases pages.
+        <strong data-i18n="qs-step1-title">Install both plugins</strong>
+        <span data-i18n="qs-step1-body">Download and activate the <strong>MCP Adapter</strong> plugin first, then the <strong>Elementor MCP</strong> plugin from their GitHub Releases pages.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <strong>Create an application password</strong>
-        Go to <strong>Users → Profile</strong> in WordPress, scroll to Application Passwords, and generate one for your AI client.
+        <strong data-i18n="qs-step2-title">Create an application password</strong>
+        <span data-i18n="qs-step2-body">Go to <strong>Users → Profile</strong> in WordPress, scroll to Application Passwords, and generate one for your AI client.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <strong>Generate the MCP config</strong>
-        In <strong>Settings → EMCP Tools → Connection</strong>, click Generate Config and copy the connection string.
+        <strong data-i18n="qs-step3-title">Generate the MCP config</strong>
+        <span data-i18n="qs-step3-body">In <strong>Settings → EMCP Tools → Connection</strong>, click Generate Config and copy the connection string.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-body">
-        <strong>Paste into your AI client</strong>
-        Add the connection string to Antigravity, Claude Code, or any MCP-compatible client, then restart it.
+        <strong data-i18n="qs-step4-title">Paste into your AI client</strong>
+        <span data-i18n="qs-step4-body">Add the connection string to Antigravity, Claude Code, or any MCP-compatible client, then restart it.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">5</div>
       <div class="step-body">
-        <strong>Start building</strong>
-        Ask your AI to list pages or create a new landing page — Elementor MCP will handle the rest.
+        <strong data-i18n="qs-step5-title">Start building</strong>
+        <span data-i18n="qs-step5-body">Ask your AI to list pages or create a new landing page — Elementor MCP will handle the rest.</span>
       </div>
     </div>
 
     <div class="callout tip">
       <span class="callout-icon">💡</span>
-      <div>
-        Need more detail on any step? The sections below walk through each one in full.
-      </div>
+      <div data-i18n="qs-callout">Need more detail on any step? The sections below walk through each one in full.</div>
     </div>
 
     <!-- ── Install plugins ── -->
-    <h2 id="install-plugins">Install plugins</h2>
-    <p>
+    <h2 id="install-plugins" data-i18n="h2-install">Install plugins</h2>
+    <p data-i18n="install-intro">
       Elementor MCP depends on the <strong>MCP Adapter plugin</strong>, so you must install that first.
       Both are installed via your WordPress dashboard as uploaded ZIP files — they are not yet available
       in the public plugin directory.
@@ -770,41 +801,35 @@
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <strong>Download both plugins from GitHub Releases</strong>
-        Download the <code>.zip</code> file for the MCP Adapter plugin and the Elementor MCP plugin from their
-        respective GitHub Releases pages. Keep both files ready.
+        <strong data-i18n="install-step1-title">Download both plugins from GitHub Releases</strong>
+        <span data-i18n="install-step1-body">Download the <code>.zip</code> file for the MCP Adapter plugin and the Elementor MCP plugin from their respective GitHub Releases pages. Keep both files ready.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <strong>Install MCP Adapter first</strong>
-        In your WordPress dashboard, go to <strong>Plugins → Add Plugin → Upload Plugin</strong>.
-        Select the MCP Adapter <code>.zip</code>, click Install Now, then Activate.
+        <strong data-i18n="install-step2-title">Install MCP Adapter first</strong>
+        <span data-i18n="install-step2-body">In your WordPress dashboard, go to <strong>Plugins → Add Plugin → Upload Plugin</strong>. Select the MCP Adapter <code>.zip</code>, click Install Now, then Activate.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <strong>Install Elementor MCP</strong>
-        Repeat the upload step with the Elementor MCP <code>.zip</code>. Install and activate it.
-        You should now see an <strong>EMCP Tools</strong> entry under Settings.
+        <strong data-i18n="install-step3-title">Install Elementor MCP</strong>
+        <span data-i18n="install-step3-body">Repeat the upload step with the Elementor MCP <code>.zip</code>. Install and activate it. You should now see an <strong>EMCP Tools</strong> entry under Settings.</span>
       </div>
     </div>
 
     <div class="callout warn">
       <span class="callout-icon">⚠</span>
-      <div>
-        Install the MCP Adapter <em>before</em> Elementor MCP. Activating Elementor MCP without the
-        adapter will result in a dependency error.
-      </div>
+      <div data-i18n="install-warn">Install the MCP Adapter <em>before</em> Elementor MCP. Activating Elementor MCP without the adapter will result in a dependency error.</div>
     </div>
 
     <!-- ── App password ── -->
-    <h2 id="app-password">Create an application password</h2>
-    <p>
+    <h2 id="app-password" data-i18n="h2-apppassword">Create an application password</h2>
+    <p data-i18n="apppassword-intro">
       Your AI client authenticates with WordPress using an <strong>Application Password</strong> — a scoped,
       revocable credential that doesn't expose your main admin password.
     </p>
@@ -812,31 +837,30 @@
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <strong>Open your WordPress user profile</strong>
-        Go to <strong>Users → Profile</strong> (or <em>Your Profile</em>).
+        <strong data-i18n="apppassword-step1-title">Open your WordPress user profile</strong>
+        <span data-i18n="apppassword-step1-body">Go to <strong>Users → Profile</strong> (or <em>Your Profile</em>).</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <strong>Scroll to Application Passwords</strong>
-        Enter a descriptive name (e.g. <code>Elementor MCP — Antigravity</code>) and click
-        <strong>Add New Application Password</strong>.
+        <strong data-i18n="apppassword-step2-title">Scroll to Application Passwords</strong>
+        <span data-i18n="apppassword-step2-body">Enter a descriptive name (e.g. <code>Elementor MCP — Antigravity</code>) and click <strong>Add New Application Password</strong>.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <strong>Copy the generated password</strong>
-        WordPress shows the password only once. Copy it immediately — you'll need it in the next step.
+        <strong data-i18n="apppassword-step3-title">Copy the generated password</strong>
+        <span data-i18n="apppassword-step3-body">WordPress shows the password only once. Copy it immediately — you'll need it in the next step.</span>
       </div>
     </div>
 
     <!-- ── Generate config ── -->
-    <h2 id="generate-config">Generate the MCP config</h2>
-    <p>
+    <h2 id="generate-config" data-i18n="h2-genconfig">Generate the MCP config</h2>
+    <p data-i18n="genconfig-intro">
       With the application password ready, return to <strong>Settings → EMCP Tools</strong> and switch
       to the <strong>Connection</strong> tab. Click <strong>Generate Config</strong>. This produces a
       connection string you'll paste into your AI client.
@@ -844,44 +868,40 @@
 
     <div class="callout tip">
       <span class="callout-icon">💡</span>
-      <div>
-        Keep the config tab open after generating. The connection string is shown only once — if you
-        navigate away, you'll need to regenerate a new one.
-      </div>
+      <div data-i18n="genconfig-tip">Keep the config tab open after generating. The connection string is shown only once — if you navigate away, you'll need to regenerate a new one.</div>
     </div>
 
     <!-- ── Antigravity ── -->
-    <h2 id="antigravity">Connect with Antigravity</h2>
-    <p>Antigravity has native MCP server support, making the connection straightforward.</p>
+    <h2 id="antigravity" data-i18n="h2-antigravity">Connect with Antigravity</h2>
+    <p data-i18n="antigravity-intro">Antigravity has native MCP server support, making the connection straightforward.</p>
 
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <strong>Copy the connection string</strong>
-        From the EMCP Tools config screen, copy the full connection string.
+        <strong data-i18n="antigravity-step1-title">Copy the connection string</strong>
+        <span data-i18n="antigravity-step1-body">From the EMCP Tools config screen, copy the full connection string.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <strong>Add to Antigravity MCP servers</strong>
-        Open Antigravity → MCP Servers → Add Server, and paste the connection string.
+        <strong data-i18n="antigravity-step2-title">Add to Antigravity MCP servers</strong>
+        <span data-i18n="antigravity-step2-body">Open Antigravity → MCP Servers → Add Server, and paste the connection string.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <strong>Refresh and enable tools</strong>
-        Click Refresh. Antigravity will pull in the available Elementor MCP tools. You can enable or
-        disable individual tools from the tools panel.
+        <strong data-i18n="antigravity-step3-title">Refresh and enable tools</strong>
+        <span data-i18n="antigravity-step3-body">Click Refresh. Antigravity will pull in the available Elementor MCP tools. You can enable or disable individual tools from the tools panel.</span>
       </div>
     </div>
 
     <!-- ── Claude Code ── -->
-    <h2 id="claude-code">Connect with Claude Code</h2>
-    <p>
+    <h2 id="claude-code" data-i18n="h2-claudecode">Connect with Claude Code</h2>
+    <p data-i18n="claudecode-intro">
       Claude Code reads MCP server definitions from a JSON config file. Paste the Elementor MCP config
       into your <code>mcp_config.json</code> (or your project's <code>.claude/mcp.json</code>), then
       restart the editor.
@@ -905,7 +925,7 @@
   }
 }</code></pre>
 
-    <p>After saving, restart Claude Code and run:</p>
+    <p data-i18n="claudecode-after">After saving, restart Claude Code and run:</p>
 
     <div class="code-header">
       <span>bash</span>
@@ -913,14 +933,14 @@
     <pre><code><span class="cmt"># Verify the MCP server is connected</span>
 /mcp list-tools elementor-mcp</code></pre>
 
-    <p>
+    <p data-i18n="claudecode-connected">
       Once connected, Claude Code can call any of the Elementor MCP tools — list pages, inspect layouts,
       create containers, update widgets, and more.
     </p>
 
     <!-- ── Other tools ── -->
-    <h2 id="other-tools">Other MCP-compatible clients</h2>
-    <p>
+    <h2 id="other-tools" data-i18n="h2-othertools">Other MCP-compatible clients</h2>
+    <p data-i18n="othertools-intro">
       Any tool that supports the Model Context Protocol can connect. The pattern is always the same:
       add the MCP server config, restart the client, and confirm the tools load.
     </p>
@@ -928,24 +948,24 @@
     <div class="card-grid">
       <div class="card">
         <div class="card-title">Cursor</div>
-        <div class="card-desc">Add the config to <code>.cursor/mcp.json</code> in your project root.</div>
+        <div class="card-desc" data-i18n="card-cursor-desc">Add the config to <code>.cursor/mcp.json</code> in your project root.</div>
         <span class="badge badge-green">MCP supported</span>
       </div>
       <div class="card">
         <div class="card-title">Windsurf</div>
-        <div class="card-desc">Use the MCP panel under Settings → AI Tools → Servers.</div>
+        <div class="card-desc" data-i18n="card-windsurf-desc">Use the MCP panel under Settings → AI Tools → Servers.</div>
         <span class="badge badge-green">MCP supported</span>
       </div>
       <div class="card">
         <div class="card-title">Continue.dev</div>
-        <div class="card-desc">Add an MCP provider block in your <code>config.yaml</code>.</div>
+        <div class="card-desc" data-i18n="card-continue-desc">Add an MCP provider block in your <code>config.yaml</code>.</div>
         <span class="badge badge-gray">Community</span>
       </div>
     </div>
 
     <!-- ── What it can do ── -->
-    <h2 id="what-it-can-do">What AI can control</h2>
-    <p>Once connected, your AI has access to the full set of Elementor MCP tools:</p>
+    <h2 id="what-it-can-do" data-i18n="h2-whatitcando">What AI can control</h2>
+    <p data-i18n="whatitcando-intro">Once connected, your AI has access to the full set of Elementor MCP tools:</p>
 
     <div class="code-header">
       <span>Available MCP tools</span>
@@ -974,53 +994,46 @@ update-widget       <span class="cmt"># update widget settings by ID</span>
 find-element        <span class="cmt"># search for an element by type or content</span></code></pre>
 
     <!-- ── Prompting ── -->
-    <h2 id="prompting">Writing effective prompts</h2>
-    <p>
+    <h2 id="prompting" data-i18n="h2-prompting">Writing effective prompts</h2>
+    <p data-i18n="prompting-intro">
       The most common source of disappointment with AI page builders isn't the tool — it's the prompt.
       A vague prompt forces the AI to guess the layout, hierarchy, spacing, and style all at once. The results
       look generic because they are generic: the AI had no direction.
     </p>
 
-    <h3>Simple vs. detailed prompts</h3>
+    <h3 data-i18n="h3-simplevdetailed">Simple vs. detailed prompts</h3>
     <div class="compare">
       <div class="compare-box bad">
-        <div class="compare-label">Too vague</div>
-        <p>
-          "Create a landing page for a web design agency."
-        </p>
+        <div class="compare-label" data-i18n="compare-bad-label">Too vague</div>
+        <p data-i18n="compare-bad-text">"Create a landing page for a web design agency."</p>
       </div>
       <div class="compare-box good">
-        <div class="compare-label">Specific and directive</div>
-        <p>
-          "Build a landing page for a web design agency. Start with a full-width hero: left-aligned heading
-          ('We build websites that convert'), a subheading in gray, and a green CTA button. Below that,
-          a 3-column icon section showing our services. Then a testimonial row with a dark background.
-          Keep spacing generous — 80px section padding. No stock photography."
-        </p>
+        <div class="compare-label" data-i18n="compare-good-label">Specific and directive</div>
+        <p data-i18n="compare-good-text">"Build a landing page for a web design agency. Start with a full-width hero: left-aligned heading ('We build websites that convert'), a subheading in gray, and a green CTA button. Below that, a 3-column icon section showing our services. Then a testimonial row with a dark background. Keep spacing generous — 80px section padding. No stock photography."</p>
       </div>
     </div>
 
     <div class="callout info">
       <span class="callout-icon">◎</span>
-      <div>
+      <div data-i18n="prompting-callout">
         <strong>The principle:</strong> AI follows direction well. It guesses layout poorly.
         The more structure you define in the prompt, the closer the first draft is to something usable.
       </div>
     </div>
 
-    <h3>What to include in a layout prompt</h3>
+    <h3 data-i18n="h3-whattoinclude">What to include in a layout prompt</h3>
     <ul style="margin: 10px 0 20px 20px; color: #bbb; font-size: 14px; line-height: 2;">
-      <li>Section order and names (hero, services, testimonials, CTA)</li>
-      <li>Layout per section (1-column, 3-column grid, alternating image-text)</li>
-      <li>Heading copy or placeholder intent</li>
-      <li>Color guidance (dark background, accent color, text color)</li>
-      <li>Spacing preferences (compact, airy, generous)</li>
-      <li>What to exclude (no carousels, no video embeds, no stock images)</li>
+      <li data-i18n="prompt-li-1">Section order and names (hero, services, testimonials, CTA)</li>
+      <li data-i18n="prompt-li-2">Layout per section (1-column, 3-column grid, alternating image-text)</li>
+      <li data-i18n="prompt-li-3">Heading copy or placeholder intent</li>
+      <li data-i18n="prompt-li-4">Color guidance (dark background, accent color, text color)</li>
+      <li data-i18n="prompt-li-5">Spacing preferences (compact, airy, generous)</li>
+      <li data-i18n="prompt-li-6">What to exclude (no carousels, no video embeds, no stock images)</li>
     </ul>
 
     <!-- ── Iterate ── -->
-    <h2 id="iterate">Iterating on results</h2>
-    <p>
+    <h2 id="iterate" data-i18n="h2-iterate">Iterating on results</h2>
+    <p data-i18n="iterate-intro">
       Don't judge the page from the first draft alone. Once the initial structure exists, keep directing
       your AI rather than starting over. Use follow-up prompts to refine:
     </p>
@@ -1043,68 +1056,61 @@ find-element        <span class="cmt"># search for an element by type or content
 <span class="cmt"># Style a button</span>
 "Change the CTA button to a dark background with white text and 8px border radius."</code></pre>
 
-    <p>
+    <p data-i18n="iterate-outro">
       Each of these maps directly to an Elementor MCP tool call. Your AI will call the right tool,
       target the right element by ID, and apply the change — no manual clicking required.
     </p>
 
     <!-- ── Security ── -->
-    <h2 id="security">Security considerations</h2>
-    <p>
+    <h2 id="security" data-i18n="h2-security">Security considerations</h2>
+    <p data-i18n="security-intro">
       Giving AI direct write access to a live site introduces risks beyond cosmetic changes. Depending
       on what you ask it to do, the AI can touch layouts, widget settings, embeds, custom JavaScript,
       and HTML blocks. AI-generated code can introduce vulnerabilities — especially in custom code widgets.
     </p>
 
-    <h3>Recommended precautions</h3>
+    <h3 data-i18n="h3-precautions">Recommended precautions</h3>
 
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <strong>Use a staging site for initial testing</strong>
-        Run your first Elementor MCP sessions on a staging copy of your site, not production.
-        Most managed WordPress hosts offer one-click staging.
+        <strong data-i18n="security-step1-title">Use a staging site for initial testing</strong>
+        <span data-i18n="security-step1-body">Run your first Elementor MCP sessions on a staging copy of your site, not production. Most managed WordPress hosts offer one-click staging.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <strong>Install a security plugin</strong>
-        Use a plugin like MalCare, Wordfence, or Solid Security. Run a scan before and after any session
-        where the AI touched custom code, HTML embeds, or script widgets.
+        <strong data-i18n="security-step2-title">Install a security plugin</strong>
+        <span data-i18n="security-step2-body">Use a plugin like MalCare, Wordfence, or Solid Security. Run a scan before and after any session where the AI touched custom code, HTML embeds, or script widgets.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <strong>Review AI-generated custom code</strong>
-        If you ask the AI to insert a custom code widget or HTML block, review the output before publishing.
-        AI-generated JavaScript should be treated as untrusted until inspected.
+        <strong data-i18n="security-step3-title">Review AI-generated custom code</strong>
+        <span data-i18n="security-step3-body">If you ask the AI to insert a custom code widget or HTML block, review the output before publishing. AI-generated JavaScript should be treated as untrusted until inspected.</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-body">
-        <strong>Rotate the application password after testing</strong>
-        When a project is done or a session ends, revoke the application password from your WordPress profile
-        and generate a new one for the next session.
+        <strong data-i18n="security-step4-title">Rotate the application password after testing</strong>
+        <span data-i18n="security-step4-body">When a project is done or a session ends, revoke the application password from your WordPress profile and generate a new one for the next session.</span>
       </div>
     </div>
 
     <div class="callout warn">
       <span class="callout-icon">⚠</span>
-      <div>
-        Application passwords grant API-level access to your site. Treat them like passwords:
-        don't commit them to version control, don't share them, and revoke them when no longer needed.
-      </div>
+      <div data-i18n="security-warn">Application passwords grant API-level access to your site. Treat them like passwords: don't commit them to version control, don't share them, and revoke them when no longer needed.</div>
     </div>
 
     <div style="margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 13px; color: var(--text-dim);">
-      <span>Last updated: May 2026</span>
-      <a href="#" style="color: var(--text-muted);">Edit this page ↗</a>
+      <span data-i18n="footer-updated">Last updated: May 2026</span>
+      <a href="#" style="color: var(--text-muted);" data-i18n="footer-edit">Edit this page ↗</a>
     </div>
 
   </main>
@@ -1166,6 +1172,153 @@ find-element        <span class="cmt"># search for an element by type or content
       topNavLinks.forEach(l => l.classList.remove('active'));
       a.classList.add('active');
     })
+  );
+
+  // ── i18n ──
+  const translations = {
+    en: {
+      'nav-home':'Home','nav-guides':'Guides','nav-plugins':'Plugins','nav-resources':'Resources',
+      'sg-getstarted':'Get started','sg-setup':'Setup','sg-connectai':'Connect your AI','sg-using':'Using Elementor MCP','sg-security':'Security',
+      'sl-overview':'Overview','sl-prerequisites':'Prerequisites','sl-quickstart':'Quickstart','sl-install':'Install plugins','sl-apppassword':'Application password','sl-genconfig':'Generate config','sl-antigravity':'Antigravity','sl-claudecode':'Claude Code','sl-othertools':'Other MCP tools','sl-prompting':'Writing effective prompts','sl-whatitcando':'What AI can control','sl-iterate':'Iterating on results','sl-security':'Security considerations',
+      'hero-breadcrumb':'GUIDES &nbsp;/&nbsp; ELEMENTOR MCP','hero-title':'Connect AI to WordPress',
+      'hero-intro':'Elementor MCP lets your AI directly control your WordPress site — creating pages, updating layouts, swapping widgets, and rebuilding sections — without manual drag-and-drop. This guide walks you through setup, configuration, and getting the most out of AI-driven page building.',
+      'hero-watch':'Watch on YouTube',
+      'h2-overview':'Overview','toc-title':'On this page','toc-overview':'Overview','toc-prerequisites':'Prerequisites','toc-install':'Install plugins','toc-apppassword':'Application password','toc-genconfig':'Generate config','toc-antigravity':'Antigravity setup','toc-claudecode':'Claude Code setup','toc-prompting':'Effective prompts','toc-whatitcando':'What AI can control','toc-security':'Security',
+      'overview-p1':'Standard AI integrations with Elementor are limited to generating copy or suggesting layout ideas. The output is text — you still have to drag, drop, and wire everything yourself. <strong>Elementor MCP changes that.</strong>',
+      'overview-p2':'MCP (Model Context Protocol) is an open standard that lets AI models call tools exposed by external servers. With the Elementor MCP plugin, your AI client can directly invoke Elementor\'s builder — creating pages, moving sections, updating widget settings, and applying styles — as structured API calls, not chat suggestions.',
+      'overview-callout':'<strong>What\'s new about this approach</strong><br />Instead of copying AI-generated HTML into Elementor, your AI <em>controls Elementor directly</em>. It can list pages, inspect structures, modify containers, and rebuild entire landing pages in a single prompt session.',
+      'h2-prerequisites':'Prerequisites','prerequisites-intro':'Before you begin, make sure the following are in place on your WordPress site.',
+      'prereq-1':'WordPress installed and accessible','prereq-2':'Elementor (free) — Elementor Pro gives access to more widgets and templates','prereq-3':'An MCP-compatible AI client (Antigravity, Claude Code, or similar)','prereq-4':'The MCP Adapter plugin','prereq-5':'The Elementor MCP plugin',
+      'card-elementor-title':'Elementor MCP Plugin','card-elementor-desc':'The core MCP server plugin that exposes Elementor\'s builder to your AI client.',
+      'card-wp-title':'WordPress MCP Connector','card-wp-desc':'Required adapter plugin — the dependency that bridges WordPress and any MCP client.',
+      'h2-quickstart':'Quickstart','quickstart-intro':'The fastest path from zero to a working AI-controlled Elementor site:',
+      'qs-step1-title':'Install both plugins','qs-step1-body':'Download and activate the <strong>MCP Adapter</strong> plugin first, then the <strong>Elementor MCP</strong> plugin from their GitHub Releases pages.',
+      'qs-step2-title':'Create an application password','qs-step2-body':'Go to <strong>Users → Profile</strong> in WordPress, scroll to Application Passwords, and generate one for your AI client.',
+      'qs-step3-title':'Generate the MCP config','qs-step3-body':'In <strong>Settings → EMCP Tools → Connection</strong>, click Generate Config and copy the connection string.',
+      'qs-step4-title':'Paste into your AI client','qs-step4-body':'Add the connection string to Antigravity, Claude Code, or any MCP-compatible client, then restart it.',
+      'qs-step5-title':'Start building','qs-step5-body':'Ask your AI to list pages or create a new landing page — Elementor MCP will handle the rest.',
+      'qs-callout':'Need more detail on any step? The sections below walk through each one in full.',
+      'h2-install':'Install plugins','install-intro':'Elementor MCP depends on the <strong>MCP Adapter plugin</strong>, so you must install that first. Both are installed via your WordPress dashboard as uploaded ZIP files — they are not yet available in the public plugin directory.',
+      'install-step1-title':'Download both plugins from GitHub Releases','install-step1-body':'Download the <code>.zip</code> file for the MCP Adapter plugin and the Elementor MCP plugin from their respective GitHub Releases pages. Keep both files ready.',
+      'install-step2-title':'Install MCP Adapter first','install-step2-body':'In your WordPress dashboard, go to <strong>Plugins → Add Plugin → Upload Plugin</strong>. Select the MCP Adapter <code>.zip</code>, click Install Now, then Activate.',
+      'install-step3-title':'Install Elementor MCP','install-step3-body':'Repeat the upload step with the Elementor MCP <code>.zip</code>. Install and activate it. You should now see an <strong>EMCP Tools</strong> entry under Settings.',
+      'install-warn':'Install the MCP Adapter <em>before</em> Elementor MCP. Activating Elementor MCP without the adapter will result in a dependency error.',
+      'h2-apppassword':'Create an application password','apppassword-intro':'Your AI client authenticates with WordPress using an <strong>Application Password</strong> — a scoped, revocable credential that doesn\'t expose your main admin password.',
+      'apppassword-step1-title':'Open your WordPress user profile','apppassword-step1-body':'Go to <strong>Users → Profile</strong> (or <em>Your Profile</em>).',
+      'apppassword-step2-title':'Scroll to Application Passwords','apppassword-step2-body':'Enter a descriptive name (e.g. <code>Elementor MCP — Antigravity</code>) and click <strong>Add New Application Password</strong>.',
+      'apppassword-step3-title':'Copy the generated password','apppassword-step3-body':'WordPress shows the password only once. Copy it immediately — you\'ll need it in the next step.',
+      'h2-genconfig':'Generate the MCP config','genconfig-intro':'With the application password ready, return to <strong>Settings → EMCP Tools</strong> and switch to the <strong>Connection</strong> tab. Click <strong>Generate Config</strong>. This produces a connection string you\'ll paste into your AI client.',
+      'genconfig-tip':'Keep the config tab open after generating. The connection string is shown only once — if you navigate away, you\'ll need to regenerate a new one.',
+      'h2-antigravity':'Connect with Antigravity','antigravity-intro':'Antigravity has native MCP server support, making the connection straightforward.',
+      'antigravity-step1-title':'Copy the connection string','antigravity-step1-body':'From the EMCP Tools config screen, copy the full connection string.',
+      'antigravity-step2-title':'Add to Antigravity MCP servers','antigravity-step2-body':'Open Antigravity → MCP Servers → Add Server, and paste the connection string.',
+      'antigravity-step3-title':'Refresh and enable tools','antigravity-step3-body':'Click Refresh. Antigravity will pull in the available Elementor MCP tools. You can enable or disable individual tools from the tools panel.',
+      'h2-claudecode':'Connect with Claude Code','claudecode-intro':'Claude Code reads MCP server definitions from a JSON config file. Paste the Elementor MCP config into your <code>mcp_config.json</code> (or your project\'s <code>.claude/mcp.json</code>), then restart the editor.',
+      'claudecode-after':'After saving, restart Claude Code and run:','claudecode-connected':'Once connected, Claude Code can call any of the Elementor MCP tools — list pages, inspect layouts, create containers, update widgets, and more.',
+      'h2-othertools':'Other MCP-compatible clients','othertools-intro':'Any tool that supports the Model Context Protocol can connect. The pattern is always the same: add the MCP server config, restart the client, and confirm the tools load.',
+      'card-cursor-desc':'Add the config to <code>.cursor/mcp.json</code> in your project root.',
+      'card-windsurf-desc':'Use the MCP panel under Settings → AI Tools → Servers.',
+      'card-continue-desc':'Add an MCP provider block in your <code>config.yaml</code>.',
+      'h2-whatitcando':'What AI can control','whatitcando-intro':'Once connected, your AI has access to the full set of Elementor MCP tools:',
+      'h2-prompting':'Writing effective prompts','prompting-intro':'The most common source of disappointment with AI page builders isn\'t the tool — it\'s the prompt. A vague prompt forces the AI to guess the layout, hierarchy, spacing, and style all at once. The results look generic because they are generic: the AI had no direction.',
+      'h3-simplevdetailed':'Simple vs. detailed prompts','compare-bad-label':'Too vague','compare-bad-text':'"Create a landing page for a web design agency."','compare-good-label':'Specific and directive',
+      'compare-good-text':'"Build a landing page for a web design agency. Start with a full-width hero: left-aligned heading (\'We build websites that convert\'), a subheading in gray, and a green CTA button. Below that, a 3-column icon section showing our services. Then a testimonial row with a dark background. Keep spacing generous — 80px section padding. No stock photography."',
+      'prompting-callout':'<strong>The principle:</strong> AI follows direction well. It guesses layout poorly. The more structure you define in the prompt, the closer the first draft is to something usable.',
+      'h3-whattoinclude':'What to include in a layout prompt',
+      'prompt-li-1':'Section order and names (hero, services, testimonials, CTA)','prompt-li-2':'Layout per section (1-column, 3-column grid, alternating image-text)','prompt-li-3':'Heading copy or placeholder intent','prompt-li-4':'Color guidance (dark background, accent color, text color)','prompt-li-5':'Spacing preferences (compact, airy, generous)','prompt-li-6':'What to exclude (no carousels, no video embeds, no stock images)',
+      'h2-iterate':'Iterating on results','iterate-intro':'Don\'t judge the page from the first draft alone. Once the initial structure exists, keep directing your AI rather than starting over. Use follow-up prompts to refine:',
+      'iterate-outro':'Each of these maps directly to an Elementor MCP tool call. Your AI will call the right tool, target the right element by ID, and apply the change — no manual clicking required.',
+      'h2-security':'Security considerations','security-intro':'Giving AI direct write access to a live site introduces risks beyond cosmetic changes. Depending on what you ask it to do, the AI can touch layouts, widget settings, embeds, custom JavaScript, and HTML blocks. AI-generated code can introduce vulnerabilities — especially in custom code widgets.',
+      'h3-precautions':'Recommended precautions',
+      'security-step1-title':'Use a staging site for initial testing','security-step1-body':'Run your first Elementor MCP sessions on a staging copy of your site, not production. Most managed WordPress hosts offer one-click staging.',
+      'security-step2-title':'Install a security plugin','security-step2-body':'Use a plugin like MalCare, Wordfence, or Solid Security. Run a scan before and after any session where the AI touched custom code, HTML embeds, or script widgets.',
+      'security-step3-title':'Review AI-generated custom code','security-step3-body':'If you ask the AI to insert a custom code widget or HTML block, review the output before publishing. AI-generated JavaScript should be treated as untrusted until inspected.',
+      'security-step4-title':'Rotate the application password after testing','security-step4-body':'When a project is done or a session ends, revoke the application password from your WordPress profile and generate a new one for the next session.',
+      'security-warn':'Application passwords grant API-level access to your site. Treat them like passwords: don\'t commit them to version control, don\'t share them, and revoke them when no longer needed.',
+      'footer-updated':'Last updated: May 2026','footer-edit':'Edit this page ↗'
+    },
+    de: {
+      'nav-home':'Startseite','nav-guides':'Anleitungen','nav-plugins':'Plugins','nav-resources':'Ressourcen',
+      'sg-getstarted':'Erste Schritte','sg-setup':'Einrichtung','sg-connectai':'KI verbinden','sg-using':'Elementor MCP nutzen','sg-security':'Sicherheit',
+      'sl-overview':'Übersicht','sl-prerequisites':'Voraussetzungen','sl-quickstart':'Schnellstart','sl-install':'Plugins installieren','sl-apppassword':'Anwendungspasswort','sl-genconfig':'Konfiguration erstellen','sl-antigravity':'Antigravity','sl-claudecode':'Claude Code','sl-othertools':'Andere MCP-Tools','sl-prompting':'Effektive Prompts schreiben','sl-whatitcando':'Was KI steuern kann','sl-iterate':'Ergebnisse verfeinern','sl-security':'Sicherheitshinweise',
+      'hero-breadcrumb':'ANLEITUNGEN &nbsp;/&nbsp; ELEMENTOR MCP','hero-title':'KI mit WordPress verbinden',
+      'hero-intro':'Elementor MCP ermöglicht es Ihrer KI, Ihre WordPress-Website direkt zu steuern — Seiten erstellen, Layouts aktualisieren, Widgets tauschen und Abschnitte neu aufbauen — ganz ohne manuelles Drag-and-Drop. Diese Anleitung führt Sie durch Einrichtung, Konfiguration und die optimale Nutzung des KI-gestützten Seitenaufbaus.',
+      'hero-watch':'Auf YouTube ansehen',
+      'h2-overview':'Übersicht','toc-title':'Auf dieser Seite','toc-overview':'Übersicht','toc-prerequisites':'Voraussetzungen','toc-install':'Plugins installieren','toc-apppassword':'Anwendungspasswort','toc-genconfig':'Konfiguration erstellen','toc-antigravity':'Antigravity-Einrichtung','toc-claudecode':'Claude Code-Einrichtung','toc-prompting':'Effektive Prompts','toc-whatitcando':'Was KI steuern kann','toc-security':'Sicherheit',
+      'overview-p1':'Standard-KI-Integrationen mit Elementor beschränken sich auf die Generierung von Texten oder das Vorschlagen von Layout-Ideen. Das Ergebnis ist Text — Sie müssen alles noch selbst per Drag-and-Drop zusammensetzen. <strong>Elementor MCP ändert das.</strong>',
+      'overview-p2':'MCP (Model Context Protocol) ist ein offener Standard, der es KI-Modellen ermöglicht, von externen Servern bereitgestellte Werkzeuge aufzurufen. Mit dem Elementor-MCP-Plugin kann Ihr KI-Client Elementors Builder direkt steuern — Seiten erstellen, Abschnitte verschieben, Widget-Einstellungen aktualisieren und Stile anwenden — als strukturierte API-Aufrufe, nicht als Chat-Vorschläge.',
+      'overview-callout':'<strong>Was an diesem Ansatz neu ist</strong><br />Anstatt KI-generierten HTML-Code in Elementor einzufügen, <em>steuert Ihre KI Elementor direkt</em>. Sie kann Seiten auflisten, Strukturen prüfen, Container anpassen und ganze Landingpages in einer einzigen Prompt-Sitzung neu aufbauen.',
+      'h2-prerequisites':'Voraussetzungen','prerequisites-intro':'Stellen Sie sicher, dass Folgendes auf Ihrer WordPress-Website vorhanden ist, bevor Sie beginnen.',
+      'prereq-1':'WordPress installiert und erreichbar','prereq-2':'Elementor (kostenlos) — Elementor Pro bietet Zugang zu mehr Widgets und Vorlagen','prereq-3':'Ein MCP-kompatibler KI-Client (Antigravity, Claude Code oder ähnliches)','prereq-4':'Das MCP-Adapter-Plugin','prereq-5':'Das Elementor-MCP-Plugin',
+      'card-elementor-title':'Elementor-MCP-Plugin','card-elementor-desc':'Das zentrale MCP-Server-Plugin, das Elementors Builder Ihrem KI-Client zugänglich macht.',
+      'card-wp-title':'WordPress-MCP-Connector','card-wp-desc':'Erforderliches Adapter-Plugin — die Brücke zwischen WordPress und jedem MCP-Client.',
+      'h2-quickstart':'Schnellstart','quickstart-intro':'Der schnellste Weg von null zu einer funktionierenden, KI-gesteuerten Elementor-Website:',
+      'qs-step1-title':'Beide Plugins installieren','qs-step1-body':'Laden Sie das <strong>MCP-Adapter</strong>-Plugin zuerst herunter und aktivieren Sie es, dann das <strong>Elementor-MCP</strong>-Plugin von den jeweiligen GitHub-Releases-Seiten.',
+      'qs-step2-title':'Anwendungspasswort erstellen','qs-step2-body':'Gehen Sie in WordPress zu <strong>Benutzer → Profil</strong>, scrollen Sie zu „Anwendungspasswörter" und generieren Sie eines für Ihren KI-Client.',
+      'qs-step3-title':'MCP-Konfiguration erstellen','qs-step3-body':'Navigieren Sie zu <strong>Einstellungen → EMCP Tools → Verbindung</strong>, klicken Sie auf „Konfiguration generieren" und kopieren Sie den Verbindungsstring.',
+      'qs-step4-title':'In Ihren KI-Client einfügen','qs-step4-body':'Fügen Sie den Verbindungsstring in Antigravity, Claude Code oder einen anderen MCP-kompatiblen Client ein und starten Sie ihn neu.',
+      'qs-step5-title':'Loslegen','qs-step5-body':'Bitten Sie Ihre KI, Seiten aufzulisten oder eine neue Landingpage zu erstellen — Elementor MCP erledigt den Rest.',
+      'qs-callout':'Benötigen Sie mehr Details zu einem Schritt? Die folgenden Abschnitte erläutern jeden Schritt ausführlich.',
+      'h2-install':'Plugins installieren','install-intro':'Elementor MCP benötigt das <strong>MCP-Adapter-Plugin</strong>, das daher zuerst installiert werden muss. Beide Plugins werden über Ihr WordPress-Dashboard als hochgeladene ZIP-Dateien installiert — sie sind noch nicht im öffentlichen Plugin-Verzeichnis verfügbar.',
+      'install-step1-title':'Beide Plugins von GitHub Releases herunterladen','install-step1-body':'Laden Sie die <code>.zip</code>-Datei für das MCP-Adapter-Plugin und das Elementor-MCP-Plugin von den jeweiligen GitHub-Releases-Seiten herunter. Halten Sie beide Dateien bereit.',
+      'install-step2-title':'Zuerst MCP Adapter installieren','install-step2-body':'Gehen Sie in Ihrem WordPress-Dashboard zu <strong>Plugins → Plugin hinzufügen → Plugin hochladen</strong>. Wählen Sie die MCP-Adapter-<code>.zip</code>, klicken Sie auf „Jetzt installieren" und dann auf „Aktivieren".',
+      'install-step3-title':'Elementor MCP installieren','install-step3-body':'Wiederholen Sie den Upload-Schritt mit der Elementor-MCP-<code>.zip</code>. Installieren und aktivieren Sie es. Unter „Einstellungen" sollte nun <strong>EMCP Tools</strong> erscheinen.',
+      'install-warn':'Installieren Sie den MCP-Adapter <em>vor</em> Elementor MCP. Das Aktivieren von Elementor MCP ohne den Adapter führt zu einem Abhängigkeitsfehler.',
+      'h2-apppassword':'Anwendungspasswort erstellen','apppassword-intro':'Ihr KI-Client authentifiziert sich bei WordPress über ein <strong>Anwendungspasswort</strong> — ein eingeschränktes, widerrufbares Anmeldedatum, das Ihr eigentliches Admin-Passwort nicht preisgibt.',
+      'apppassword-step1-title':'WordPress-Benutzerprofil öffnen','apppassword-step1-body':'Gehen Sie zu <strong>Benutzer → Profil</strong> (oder <em>Ihr Profil</em>).',
+      'apppassword-step2-title':'Zu „Anwendungspasswörter" scrollen','apppassword-step2-body':'Geben Sie einen beschreibenden Namen ein (z. B. <code>Elementor MCP — Antigravity</code>) und klicken Sie auf <strong>Neues Anwendungspasswort hinzufügen</strong>.',
+      'apppassword-step3-title':'Generiertes Passwort kopieren','apppassword-step3-body':'WordPress zeigt das Passwort nur einmal an. Kopieren Sie es sofort — Sie benötigen es im nächsten Schritt.',
+      'h2-genconfig':'MCP-Konfiguration erstellen','genconfig-intro':'Kehren Sie nach dem Erstellen des Anwendungspassworts zu <strong>Einstellungen → EMCP Tools</strong> zurück und wechseln Sie zum Tab <strong>Verbindung</strong>. Klicken Sie auf <strong>Konfiguration generieren</strong>. Dies erzeugt einen Verbindungsstring, den Sie in Ihren KI-Client einfügen.',
+      'genconfig-tip':'Lassen Sie den Konfigurations-Tab nach dem Generieren geöffnet. Der Verbindungsstring wird nur einmal angezeigt — wenn Sie die Seite verlassen, müssen Sie einen neuen generieren.',
+      'h2-antigravity':'Mit Antigravity verbinden','antigravity-intro':'Antigravity unterstützt MCP-Server nativ, was die Verbindung unkompliziert macht.',
+      'antigravity-step1-title':'Verbindungsstring kopieren','antigravity-step1-body':'Kopieren Sie den vollständigen Verbindungsstring aus dem EMCP-Tools-Konfigurationsbildschirm.',
+      'antigravity-step2-title':'Zu Antigravity-MCP-Servern hinzufügen','antigravity-step2-body':'Öffnen Sie Antigravity → MCP-Server → Server hinzufügen und fügen Sie den Verbindungsstring ein.',
+      'antigravity-step3-title':'Aktualisieren und Tools aktivieren','antigravity-step3-body':'Klicken Sie auf „Aktualisieren". Antigravity lädt die verfügbaren Elementor-MCP-Tools. Im Tools-Panel können Sie einzelne Tools aktivieren oder deaktivieren.',
+      'h2-claudecode':'Mit Claude Code verbinden','claudecode-intro':'Claude Code liest MCP-Server-Definitionen aus einer JSON-Konfigurationsdatei. Fügen Sie die Elementor-MCP-Konfiguration in Ihre <code>mcp_config.json</code> (oder die <code>.claude/mcp.json</code> Ihres Projekts) ein und starten Sie den Editor neu.',
+      'claudecode-after':'Starten Sie nach dem Speichern Claude Code neu und führen Sie aus:','claudecode-connected':'Nach der Verbindung kann Claude Code alle Elementor-MCP-Tools aufrufen — Seiten auflisten, Layouts prüfen, Container erstellen, Widgets aktualisieren und mehr.',
+      'h2-othertools':'Andere MCP-kompatible Clients','othertools-intro':'Jedes Tool, das das Model Context Protocol unterstützt, kann sich verbinden. Das Muster ist immer gleich: MCP-Server-Konfiguration hinzufügen, Client neu starten und prüfen, ob die Tools geladen werden.',
+      'card-cursor-desc':'Fügen Sie die Konfiguration in <code>.cursor/mcp.json</code> im Projektstamm ein.',
+      'card-windsurf-desc':'Verwenden Sie das MCP-Panel unter Einstellungen → KI-Tools → Server.',
+      'card-continue-desc':'Fügen Sie einen MCP-Provider-Block in Ihre <code>config.yaml</code> ein.',
+      'h2-whatitcando':'Was KI steuern kann','whatitcando-intro':'Nach der Verbindung hat Ihre KI Zugriff auf den vollständigen Satz an Elementor-MCP-Tools:',
+      'h2-prompting':'Effektive Prompts schreiben','prompting-intro':'Die häufigste Quelle der Enttäuschung bei KI-Seitenbuildern ist nicht das Tool — es ist der Prompt. Ein vager Prompt zwingt die KI, Layout, Hierarchie, Abstände und Stil gleichzeitig zu erraten. Die Ergebnisse wirken generisch, weil sie es sind: Die KI hatte keine Vorgaben.',
+      'h3-simplevdetailed':'Einfache vs. detaillierte Prompts','compare-bad-label':'Zu vage','compare-bad-text':'„Erstelle eine Landingpage für eine Webdesign-Agentur."','compare-good-label':'Spezifisch und direktiv',
+      'compare-good-text':'„Erstelle eine Landingpage für eine Webdesign-Agentur. Beginne mit einem vollbreiten Hero: linksbündige Überschrift (\'Wir bauen Websites, die konvertieren\'), eine graue Unterüberschrift und ein grüner CTA-Button. Darunter ein 3-spaltiger Icon-Bereich für unsere Leistungen. Dann eine Testimonial-Reihe mit dunklem Hintergrund. Großzügige Abstände — 80px Padding. Keine Stockfotos."',
+      'prompting-callout':'<strong>Das Prinzip:</strong> KI folgt Anweisungen gut. Layouts errät sie schlecht. Je mehr Struktur Sie im Prompt vorgeben, desto näher ist der erste Entwurf an etwas Verwendbarem.',
+      'h3-whattoinclude':'Was in einen Layout-Prompt gehört',
+      'prompt-li-1':'Reihenfolge und Namen der Abschnitte (Hero, Leistungen, Testimonials, CTA)','prompt-li-2':'Layout je Abschnitt (1 Spalte, 3-Spalten-Grid, abwechselndes Bild-Text-Layout)','prompt-li-3':'Überschriftentext oder Platzhalterabsicht','prompt-li-4':'Farbvorgaben (dunkler Hintergrund, Akzentfarbe, Textfarbe)','prompt-li-5':'Abstandspräferenzen (kompakt, luftig, großzügig)','prompt-li-6':'Was ausgeschlossen werden soll (keine Karussells, keine Video-Embeds, keine Stockfotos)',
+      'h2-iterate':'Ergebnisse verfeinern','iterate-intro':'Beurteilen Sie die Seite nicht nur anhand des ersten Entwurfs. Sobald die Grundstruktur steht, leiten Sie Ihre KI weiter an, anstatt von vorn zu beginnen. Verwenden Sie Folge-Prompts zur Verfeinerung:',
+      'iterate-outro':'Jeder dieser Befehle wird direkt einem Elementor-MCP-Tool-Aufruf zugeordnet. Ihre KI ruft das richtige Tool auf, zielt auf das richtige Element per ID und wendet die Änderung an — ganz ohne manuelles Klicken.',
+      'h2-security':'Sicherheitshinweise','security-intro':'KI direkten Schreibzugriff auf eine Live-Website zu geben, birgt Risiken über optische Änderungen hinaus. Je nach Aufgabe kann die KI Layouts, Widget-Einstellungen, Embeds, benutzerdefiniertes JavaScript und HTML-Blöcke berühren. KI-generierter Code kann Sicherheitslücken einführen — besonders in benutzerdefinierten Code-Widgets.',
+      'h3-precautions':'Empfohlene Vorsichtsmaßnahmen',
+      'security-step1-title':'Staging-Website für erste Tests nutzen','security-step1-body':'Führen Sie Ihre ersten Elementor-MCP-Sitzungen auf einer Staging-Kopie Ihrer Website durch, nicht auf der Produktionsumgebung. Die meisten verwalteten WordPress-Hoster bieten Ein-Klick-Staging an.',
+      'security-step2-title':'Sicherheits-Plugin installieren','security-step2-body':'Verwenden Sie ein Plugin wie MalCare, Wordfence oder Solid Security. Führen Sie einen Scan vor und nach jeder Sitzung durch, in der die KI benutzerdefinierten Code, HTML-Embeds oder Script-Widgets berührt hat.',
+      'security-step3-title':'KI-generierten Code prüfen','security-step3-body':'Wenn Sie die KI bitten, ein benutzerdefiniertes Code-Widget oder einen HTML-Block einzufügen, prüfen Sie die Ausgabe vor der Veröffentlichung. KI-generiertes JavaScript sollte als nicht vertrauenswürdig behandelt werden, bis es geprüft wurde.',
+      'security-step4-title':'Anwendungspasswort nach dem Testen rotieren','security-step4-body':'Wenn ein Projekt abgeschlossen ist oder eine Sitzung endet, widerrufen Sie das Anwendungspasswort in Ihrem WordPress-Profil und generieren Sie für die nächste Sitzung ein neues.',
+      'security-warn':'Anwendungspasswörter gewähren API-Level-Zugriff auf Ihre Website. Behandeln Sie sie wie Passwörter: Fügen Sie sie nicht in die Versionskontrolle ein, geben Sie sie nicht weiter und widerrufen Sie sie, wenn sie nicht mehr benötigt werden.',
+      'footer-updated':'Zuletzt aktualisiert: Mai 2026','footer-edit':'Seite bearbeiten ↗'
+    }
+  };
+
+  function applyLang(lang) {
+    document.documentElement.lang = lang;
+    document.title = lang === 'de' ? 'Elementor MCP — KI mit WordPress verbinden' : 'Elementor MCP — Connect AI to WordPress';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const val = translations[lang][el.dataset.i18n];
+      if (val !== undefined) el.innerHTML = val;
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.lang === lang)
+    );
+    localStorage.setItem('lang', lang);
+  }
+
+  const savedLang = localStorage.getItem('lang');
+  const browserLang = navigator.language.startsWith('de') ? 'de' : 'en';
+  applyLang(savedLang || browserLang);
+
+  document.querySelectorAll('.lang-btn').forEach(btn =>
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang))
   );
 </script>
 
