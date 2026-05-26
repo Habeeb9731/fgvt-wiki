@@ -636,6 +636,11 @@
       <div class="sidebar-group-label" data-i18n="sg-security">Security</div>
       <a href="#security" data-i18n="sl-security">Security considerations</a>
     </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label" data-i18n="sg-slytranslate">SlyTranslate</div>
+      <a href="#slytranslate" data-i18n="sl-sly-overview">Overview</a>
+      <a href="#slytranslate-changelog" data-i18n="sl-sly-changelog">v1.9.0-beta.2 changelog</a>
+    </div>
   </aside>
 
   <!-- ── Main content ── -->
@@ -682,6 +687,8 @@
       <a href="#prompting" data-i18n="toc-prompting">Effective prompts</a>
       <a href="#what-it-can-do" data-i18n="toc-whatitcando">What AI can control</a>
       <a href="#security" data-i18n="toc-security">Security</a>
+      <a href="#slytranslate" data-i18n="toc-sly-overview">SlyTranslate</a>
+      <a href="#slytranslate-changelog" data-i18n="toc-sly-changelog">v1.9.0-beta.2</a>
     </div>
 
     <div class="clearfix">
@@ -1108,6 +1115,91 @@ find-element        <span class="cmt"># search for an element by type or content
       <div data-i18n="security-warn">Application passwords grant API-level access to your site. Treat them like passwords: don't commit them to version control, don't share them, and revoke them when no longer needed.</div>
     </div>
 
+    <!-- ── SlyTranslate Overview ── -->
+    <h2 id="slytranslate" data-i18n="h2-slytranslate">SlyTranslate Plugin</h2>
+    <p data-i18n="slytranslate-intro">
+      SlyTranslate is a WordPress plugin that brings AI-powered content translation directly into your MCP workflow.
+      It exposes translation abilities through the MCP Adapter, so LLM clients like Claude Code can translate posts
+      and pages without leaving the conversation.
+    </p>
+
+    <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 4px;">
+      <a href="https://github.com/SlyBase/wordpress-slytranslate/releases" target="_blank" rel="noopener" style="text-decoration:none;">
+        <div class="card" style="height:100%;">
+          <div class="card-title" style="display:flex; align-items:center; gap:8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:.7;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span data-i18n="card-sly-title">SlyTranslate Plugin</span>
+          </div>
+          <div class="card-desc" data-i18n="card-sly-desc">AI translation for WordPress posts and pages via MCP. Supports server-side and client-side LLM workflows.</div>
+          <span class="card-link">SlyBase/wordpress-slytranslate ↗</span>
+        </div>
+      </a>
+    </div>
+
+    <p data-i18n="slytranslate-mcp-intro">Once installed and connected, SlyTranslate exposes three core MCP abilities:</p>
+
+    <div class="code-header">
+      <span data-i18n="sly-abilities-header">SlyTranslate MCP abilities</span>
+    </div>
+    <pre><code><span class="cmt"># Discovery</span>
+mcp-adapter-discover-abilities   <span class="cmt"># list all registered translation abilities</span>
+mcp-adapter-get-ability-info     <span class="cmt"># get schema + examples for a specific ability</span>
+mcp-adapter-execute-ability      <span class="cmt"># execute any ability by name with parameters</span></code></pre>
+
+    <!-- ── SlyTranslate Changelog ── -->
+    <h2 id="slytranslate-changelog" data-i18n="h2-sly-changelog">What's new — v1.9.0-beta.2</h2>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">
+      <span class="badge badge-orange">Pre-release</span>&nbsp; Released May 26, 2026 &nbsp;·&nbsp;
+      <a href="https://github.com/SlyBase/wordpress-slytranslate/releases/tag/v1.9.0-beta.2" target="_blank" rel="noopener" style="color:var(--text-muted); text-decoration:underline;">View on GitHub ↗</a>
+    </p>
+
+    <h3 data-i18n="h3-sly-features">New features</h3>
+
+    <div class="step">
+      <div class="step-num" style="background:rgba(7,148,127,.1); border-color:#07947f; color:#07947f;">+</div>
+      <div class="step-body">
+        <strong data-i18n="sly-feat1-title">Client-side translation workflow</strong>
+        <span data-i18n="sly-feat1-body">Three new abilities enable LLM-driven translation without requiring a server-side AI connector. The LLM decomposes, translates, and persists content directly:</span>
+        <div class="code-header" style="margin-top:12px;">
+          <span data-i18n="sly-feat1-code-label">New abilities</span>
+        </div>
+        <pre><code>ai-translate/prepare-client-translation       <span class="cmt"># decompose one post into labelled units</span>
+ai-translate/apply-client-translation         <span class="cmt"># persist translated units back to the post</span>
+ai-translate/prepare-client-translation-bulk  <span class="cmt"># bulk decompose multiple posts</span>
+ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist translated unit packages</span></code></pre>
+        <div class="callout info" style="margin-top:8px;">
+          <span class="callout-icon">◎</span>
+          <div data-i18n="sly-feat1-callout">This is the workflow used in this session to translate posts. It works without any API key or AI connector configured in WordPress — the connected LLM client does the translation.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="background:rgba(7,148,127,.1); border-color:#07947f; color:#07947f;">+</div>
+      <div class="step-body">
+        <strong data-i18n="sly-feat2-title">Cleaner UI in MCP-only setups</strong>
+        <span data-i18n="sly-feat2-body">Server-side translation controls (editor sidebar, list-table actions, TranslatePress editor panel) are now hidden unless an AI connector is actually configured. This prevents non-functional buttons from appearing when only the client-side workflow is in use.</span>
+      </div>
+    </div>
+
+    <h3 data-i18n="h3-sly-fixes">Bug fixes</h3>
+
+    <div class="step">
+      <div class="step-num" style="background:rgba(90,60,0,.2); border-color:#5a3e00; color:#f0a500;">✓</div>
+      <div class="step-body">
+        <strong data-i18n="sly-fix1-title">Clarified translations parameter format</strong>
+        <span data-i18n="sly-fix1-body">Updated descriptions for <code>apply-client-translation</code> and <code>apply-client-translation-bulk</code> to explicitly state that <code>translations</code> must be an array of <code>{id, translated}</code> objects — not an associative object keyed by unit ID. This prevents LLM clients from sending the wrong format.</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="background:rgba(90,60,0,.2); border-color:#5a3e00; color:#f0a500;">✓</div>
+      <div class="step-body">
+        <strong data-i18n="sly-fix2-title">Output unit property descriptions added</strong>
+        <span data-i18n="sly-fix2-body">Property descriptions are now included in the <code>prepare-client-translation</code> output schema for units. LLM clients can now use the workflow autonomously without needing to call <code>get-ability-info</code> first to understand the output structure.</span>
+      </div>
+    </div>
+
     <div style="margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 13px; color: var(--text-dim);">
       <span data-i18n="footer-updated">Last updated: May 2026</span>
       <a href="#" style="color: var(--text-muted);" data-i18n="footer-edit">Edit this page ↗</a>
@@ -1235,7 +1327,28 @@ find-element        <span class="cmt"># search for an element by type or content
       'security-step3-title':'Review AI-generated custom code','security-step3-body':'If you ask the AI to insert a custom code widget or HTML block, review the output before publishing. AI-generated JavaScript should be treated as untrusted until inspected.',
       'security-step4-title':'Rotate the application password after testing','security-step4-body':'When a project is done or a session ends, revoke the application password from your WordPress profile and generate a new one for the next session.',
       'security-warn':'Application passwords grant API-level access to your site. Treat them like passwords: don\'t commit them to version control, don\'t share them, and revoke them when no longer needed.',
-      'footer-updated':'Last updated: May 2026','footer-edit':'Edit this page ↗'
+      'footer-updated':'Last updated: May 2026','footer-edit':'Edit this page ↗',
+      'sg-slytranslate':'SlyTranslate',
+      'sl-sly-overview':'Overview','sl-sly-changelog':'v1.9.0-beta.2 changelog',
+      'toc-sly-overview':'SlyTranslate','toc-sly-changelog':'v1.9.0-beta.2',
+      'h2-slytranslate':'SlyTranslate Plugin',
+      'slytranslate-intro':'SlyTranslate is a WordPress plugin that brings AI-powered content translation directly into your MCP workflow. It exposes translation abilities through the MCP Adapter, so LLM clients like Claude Code can translate posts and pages without leaving the conversation.',
+      'card-sly-title':'SlyTranslate Plugin','card-sly-desc':'AI translation for WordPress posts and pages via MCP. Supports server-side and client-side LLM workflows.',
+      'slytranslate-mcp-intro':'Once installed and connected, SlyTranslate exposes three core MCP abilities:',
+      'sly-abilities-header':'SlyTranslate MCP abilities',
+      'h2-sly-changelog':'What\'s new — v1.9.0-beta.2',
+      'h3-sly-features':'New features',
+      'sly-feat1-title':'Client-side translation workflow',
+      'sly-feat1-body':'Three new abilities enable LLM-driven translation without requiring a server-side AI connector. The LLM decomposes, translates, and persists content directly:',
+      'sly-feat1-code-label':'New abilities',
+      'sly-feat1-callout':'This is the workflow used in this session to translate posts. It works without any API key or AI connector configured in WordPress — the connected LLM client does the translation.',
+      'sly-feat2-title':'Cleaner UI in MCP-only setups',
+      'sly-feat2-body':'Server-side translation controls (editor sidebar, list-table actions, TranslatePress editor panel) are now hidden unless an AI connector is actually configured. This prevents non-functional buttons from appearing when only the client-side workflow is in use.',
+      'h3-sly-fixes':'Bug fixes',
+      'sly-fix1-title':'Clarified translations parameter format',
+      'sly-fix1-body':'Updated descriptions for <code>apply-client-translation</code> and <code>apply-client-translation-bulk</code> to explicitly state that <code>translations</code> must be an array of <code>{id, translated}</code> objects — not an associative object keyed by unit ID. This prevents LLM clients from sending the wrong format.',
+      'sly-fix2-title':'Output unit property descriptions added',
+      'sly-fix2-body':'Property descriptions are now included in the <code>prepare-client-translation</code> output schema for units. LLM clients can now use the workflow autonomously without needing to call <code>get-ability-info</code> first to understand the output structure.'
     },
     de: {
       'nav-home':'Startseite','nav-guides':'Anleitungen','nav-plugins':'Plugins','nav-resources':'Ressourcen',
@@ -1296,7 +1409,28 @@ find-element        <span class="cmt"># search for an element by type or content
       'security-step3-title':'KI-generierten Code prüfen','security-step3-body':'Wenn Sie die KI bitten, ein benutzerdefiniertes Code-Widget oder einen HTML-Block einzufügen, prüfen Sie die Ausgabe vor der Veröffentlichung. KI-generiertes JavaScript sollte als nicht vertrauenswürdig behandelt werden, bis es geprüft wurde.',
       'security-step4-title':'Anwendungspasswort nach dem Testen rotieren','security-step4-body':'Wenn ein Projekt abgeschlossen ist oder eine Sitzung endet, widerrufen Sie das Anwendungspasswort in Ihrem WordPress-Profil und generieren Sie für die nächste Sitzung ein neues.',
       'security-warn':'Anwendungspasswörter gewähren API-Level-Zugriff auf Ihre Website. Behandeln Sie sie wie Passwörter: Fügen Sie sie nicht in die Versionskontrolle ein, geben Sie sie nicht weiter und widerrufen Sie sie, wenn sie nicht mehr benötigt werden.',
-      'footer-updated':'Zuletzt aktualisiert: Mai 2026','footer-edit':'Seite bearbeiten ↗'
+      'footer-updated':'Zuletzt aktualisiert: Mai 2026','footer-edit':'Seite bearbeiten ↗',
+      'sg-slytranslate':'SlyTranslate',
+      'sl-sly-overview':'Übersicht','sl-sly-changelog':'v1.9.0-beta.2 Changelog',
+      'toc-sly-overview':'SlyTranslate','toc-sly-changelog':'v1.9.0-beta.2',
+      'h2-slytranslate':'SlyTranslate Plugin',
+      'slytranslate-intro':'SlyTranslate ist ein WordPress-Plugin, das KI-gestützte Inhaltsübersetzung direkt in Ihren MCP-Workflow integriert. Es stellt Übersetzungs-Abilities über den MCP-Adapter bereit, sodass LLM-Clients wie Claude Code Beiträge und Seiten übersetzen können, ohne die Konversation zu verlassen.',
+      'card-sly-title':'SlyTranslate Plugin','card-sly-desc':'KI-Übersetzung für WordPress-Beiträge und -Seiten via MCP. Unterstützt serverseitige und clientseitige LLM-Workflows.',
+      'slytranslate-mcp-intro':'Nach Installation und Verbindung stellt SlyTranslate drei zentrale MCP-Abilities bereit:',
+      'sly-abilities-header':'SlyTranslate MCP-Abilities',
+      'h2-sly-changelog':'Neuigkeiten — v1.9.0-beta.2',
+      'h3-sly-features':'Neue Funktionen',
+      'sly-feat1-title':'Clientseitiger Übersetzungs-Workflow',
+      'sly-feat1-body':'Drei neue Abilities ermöglichen LLM-gestützte Übersetzung ohne serverseitigen KI-Connector. Das LLM zerlegt, übersetzt und speichert Inhalte direkt:',
+      'sly-feat1-code-label':'Neue Abilities',
+      'sly-feat1-callout':'Dies ist der Workflow, der in dieser Sitzung zur Übersetzung von Beiträgen verwendet wurde. Er funktioniert ohne konfigurierten API-Schlüssel oder KI-Connector in WordPress — der verbundene LLM-Client übernimmt die Übersetzung.',
+      'sly-feat2-title':'Sauberere UI in reinen MCP-Setups',
+      'sly-feat2-body':'Serverseitige Übersetzungssteuerelemente (Editor-Sidebar, Listenaktionen, TranslatePress-Editor-Panel) werden jetzt ausgeblendet, wenn kein KI-Connector konfiguriert ist. Damit werden nicht funktionale Schaltflächen verhindert, wenn nur der clientseitige Workflow genutzt wird.',
+      'h3-sly-fixes':'Fehlerbehebungen',
+      'sly-fix1-title':'Translations-Parameter-Format präzisiert',
+      'sly-fix1-body':'Die Beschreibungen für <code>apply-client-translation</code> und <code>apply-client-translation-bulk</code> wurden aktualisiert: <code>translations</code> muss ein Array aus <code>{id, translated}</code>-Objekten sein — kein assoziatives Objekt mit Unit-IDs als Schlüsseln. Dies verhindert, dass LLM-Clients das falsche Format senden.',
+      'sly-fix2-title':'Eigenschaftsbeschreibungen für Output-Units hinzugefügt',
+      'sly-fix2-body':'Das Output-Schema von <code>prepare-client-translation</code> enthält jetzt Eigenschaftsbeschreibungen für Units. LLM-Clients können den Workflow nun eigenständig nutzen, ohne zuvor <code>get-ability-info</code> aufrufen zu müssen.'
     }
   };
 
