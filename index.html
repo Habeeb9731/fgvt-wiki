@@ -640,6 +640,7 @@
       <div class="sidebar-group-label" data-i18n="sg-slytranslate">SlyTranslate</div>
       <a href="#slytranslate" data-i18n="sl-sly-overview">Overview</a>
       <a href="#slytranslate-changelog" data-i18n="sl-sly-changelog">v1.9.0-beta.2 changelog</a>
+      <a href="#translate-video" data-i18n="sl-translate-video">Translate with Claude AI</a>
     </div>
   </aside>
 
@@ -689,6 +690,7 @@
       <a href="#security" data-i18n="toc-security">Security</a>
       <a href="#slytranslate" data-i18n="toc-sly-overview">SlyTranslate</a>
       <a href="#slytranslate-changelog" data-i18n="toc-sly-changelog">v1.9.0-beta.2</a>
+      <a href="#translate-video" data-i18n="toc-translate-video">Translate with Claude AI</a>
     </div>
 
     <div class="clearfix">
@@ -1200,6 +1202,13 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       </div>
     </div>
 
+    <!-- ── Translate Using Claude AI ── -->
+    <h2 id="translate-video" data-i18n="h2-translate-video">Translating with Claude AI</h2>
+    <p data-i18n="translate-video-intro">Watch how Claude AI performs the client-side translation workflow in action, using SlyTranslate's MCP abilities to translate WordPress posts directly from the conversation.</p>
+    <video controls style="width:100%; border-radius:12px; border:1px solid var(--border); margin-bottom:8px; display:block;">
+      <source src="images/Translate_Using_ClaudeAI.mp4" type="video/mp4">
+    </video>
+
     <div style="margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-dim);">
       <span data-i18n="footer-updated">Last updated: May 2026</span>
     </div>
@@ -1347,7 +1356,11 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       'sly-fix1-title':'Clarified translations parameter format',
       'sly-fix1-body':'Updated descriptions for <code>apply-client-translation</code> and <code>apply-client-translation-bulk</code> to explicitly state that <code>translations</code> must be an array of <code>{id, translated}</code> objects — not an associative object keyed by unit ID. This prevents LLM clients from sending the wrong format.',
       'sly-fix2-title':'Output unit property descriptions added',
-      'sly-fix2-body':'Property descriptions are now included in the <code>prepare-client-translation</code> output schema for units. LLM clients can now use the workflow autonomously without needing to call <code>get-ability-info</code> first to understand the output structure.'
+      'sly-fix2-body':'Property descriptions are now included in the <code>prepare-client-translation</code> output schema for units. LLM clients can now use the workflow autonomously without needing to call <code>get-ability-info</code> first to understand the output structure.',
+      'sl-translate-video':'Translate with Claude AI',
+      'toc-translate-video':'Translate with Claude AI',
+      'h2-translate-video':'Translating with Claude AI',
+      'translate-video-intro':'Watch how Claude AI performs the client-side translation workflow in action, using SlyTranslate\'s MCP abilities to translate WordPress posts directly from the conversation.'
     },
     de: {
       'nav-home':'Startseite','nav-guides':'Anleitungen','nav-plugins':'Plugins','nav-resources':'Ressourcen',
@@ -1429,7 +1442,11 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       'sly-fix1-title':'Translations-Parameter-Format präzisiert',
       'sly-fix1-body':'Die Beschreibungen für <code>apply-client-translation</code> und <code>apply-client-translation-bulk</code> wurden aktualisiert: <code>translations</code> muss ein Array aus <code>{id, translated}</code>-Objekten sein — kein assoziatives Objekt mit Unit-IDs als Schlüsseln. Dies verhindert, dass LLM-Clients das falsche Format senden.',
       'sly-fix2-title':'Eigenschaftsbeschreibungen für Output-Units hinzugefügt',
-      'sly-fix2-body':'Das Output-Schema von <code>prepare-client-translation</code> enthält jetzt Eigenschaftsbeschreibungen für Units. LLM-Clients können den Workflow nun eigenständig nutzen, ohne zuvor <code>get-ability-info</code> aufrufen zu müssen.'
+      'sly-fix2-body':'Das Output-Schema von <code>prepare-client-translation</code> enthält jetzt Eigenschaftsbeschreibungen für Units. LLM-Clients können den Workflow nun eigenständig nutzen, ohne zuvor <code>get-ability-info</code> aufrufen zu müssen.',
+      'sl-translate-video':'Mit Claude AI übersetzen',
+      'toc-translate-video':'Mit Claude AI übersetzen',
+      'h2-translate-video':'Übersetzung mit Claude AI',
+      'translate-video-intro':'Sehen Sie, wie Claude AI den clientseitigen Übersetzungs-Workflow in Aktion durchführt und dabei die MCP-Abilities von SlyTranslate nutzt, um WordPress-Beiträge direkt aus der Konversation zu übersetzen.'
     }
   };
 
