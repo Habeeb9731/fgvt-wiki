@@ -577,6 +577,7 @@
       .callout { flex-direction: column; gap: 8px; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -633,6 +634,10 @@
       <a href="#iterate" data-i18n="sl-iterate">Iterating on results</a>
     </div>
     <div class="sidebar-group">
+      <div class="sidebar-group-label" data-i18n="sg-cost">Cost &amp; Performance</div>
+      <a href="#cost-estimates" data-i18n="sl-cost">Cost estimates</a>
+    </div>
+    <div class="sidebar-group">
       <div class="sidebar-group-label" data-i18n="sg-security">Security</div>
       <a href="#security" data-i18n="sl-security">Security considerations</a>
     </div>
@@ -687,6 +692,7 @@
       <a href="#claude-code" data-i18n="toc-claudecode">Claude Code setup</a>
       <a href="#prompting" data-i18n="toc-prompting">Effective prompts</a>
       <a href="#what-it-can-do" data-i18n="toc-whatitcando">What AI can control</a>
+      <a href="#cost-estimates" data-i18n="toc-cost">Cost estimates</a>
       <a href="#security" data-i18n="toc-security">Security</a>
       <a href="#slytranslate" data-i18n="toc-sly-overview">SlyTranslate</a>
       <a href="#slytranslate-changelog" data-i18n="toc-sly-changelog">v1.9.0-beta.2</a>
@@ -1070,6 +1076,89 @@ find-element        <span class="cmt"># search for an element by type or content
       target the right element by ID, and apply the change — no manual clicking required.
     </p>
 
+    <!-- ── Cost Estimates ── -->
+    <h2 id="cost-estimates" data-i18n="h2-cost">AI Cost Estimates</h2>
+    <p data-i18n="cost-intro" style="color:#ccc;">
+      These estimates are based on Claude Sonnet 4.6 pricing — <strong>$3.00&nbsp;/&nbsp;1M input</strong> · <strong>$15.00&nbsp;/&nbsp;1M output</strong> —
+      and real session data from this workflow. Costs scale with page complexity and conversation length.
+    </p>
+
+    <div class="callout info">
+      <span class="callout-icon">◎</span>
+      <div data-i18n="cost-callout">
+        <strong>Pricing snapshot — June 2026</strong><br/>
+        Claude Sonnet 4.6: $3.00 / 1M input · $15.00 / 1M output.
+        Run <code>/cost</code> in Claude Code to see your live session total.
+      </div>
+    </div>
+
+    <h3 data-i18n="h3-token-dist">Token distribution — typical turn</h3>
+    <p style="font-size:14px; color:#aaa; margin-bottom:16px;" data-i18n="cost-pie-desc">
+      Every turn loads the system prompt, accumulated conversation history, MCP tool results, and
+      generates a response. The system prompt is the largest fixed cost — it is paid on every message.
+    </p>
+
+    <div style="display:flex; gap:28px; align-items:center; flex-wrap:wrap; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:28px; margin:0 0 36px;">
+      <div style="flex:0 0 200px; height:200px; position:relative;">
+        <canvas id="pieChart"></canvas>
+      </div>
+      <div id="pieLegend" style="flex:1; min-width:160px; display:flex; flex-direction:column; gap:12px;"></div>
+    </div>
+
+    <h3 data-i18n="h3-cost-task">Cost per task type</h3>
+    <p style="font-size:14px; color:#aaa; margin-bottom:16px;" data-i18n="cost-bar-desc">
+      A post/page query is the cheapest operation — mostly read-only with a small JSON response.
+      Layout fixes involve multiple sequential tool calls. Full page translation is the most expensive,
+      requiring a large page-structure read, LLM processing, and widget-by-widget updates.
+    </p>
+
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; margin-bottom:36px;">
+      <canvas id="barChart"></canvas>
+    </div>
+
+    <h3 data-i18n="h3-runs-budget">Runs achievable per budget</h3>
+    <p style="font-size:14px; color:#aaa; margin-bottom:16px;" data-i18n="cost-line-desc">
+      How many operations you can complete at various spend levels. Post queries go furthest;
+      translations consume budget roughly 12× faster than queries.
+    </p>
+
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; margin-bottom:36px;">
+      <canvas id="lineChart"></canvas>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:13.5px; margin-bottom:8px;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border);">
+            <th style="text-align:left; padding:10px 14px; color:var(--text-muted); font-weight:600; font-size:11px; letter-spacing:.5px; text-transform:uppercase;" data-i18n="cost-th-task">Task</th>
+            <th style="text-align:right; padding:10px 14px; color:var(--text-muted); font-weight:600; font-size:11px; letter-spacing:.5px; text-transform:uppercase;" data-i18n="cost-th-tokens">Avg tokens</th>
+            <th style="text-align:right; padding:10px 14px; color:var(--text-muted); font-weight:600; font-size:11px; letter-spacing:.5px; text-transform:uppercase;" data-i18n="cost-th-cost">Cost / run</th>
+            <th style="text-align:right; padding:10px 14px; color:var(--text-muted); font-weight:600; font-size:11px; letter-spacing:.5px; text-transform:uppercase;" data-i18n="cost-th-runs">Runs / $20</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 14px; color:var(--text);" data-i18n="cost-row1-task">Post / page query</td>
+            <td style="padding:12px 14px; text-align:right; color:#888; font-family:var(--mono);">~8,500</td>
+            <td style="padding:12px 14px; text-align:right; color:#5ad4e6; font-family:var(--mono);">$0.015–$0.030</td>
+            <td style="padding:12px 14px; text-align:right; color:#888; font-family:var(--mono);">~700–1,300</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 14px; color:var(--text);" data-i18n="cost-row2-task">Layout fix</td>
+            <td style="padding:12px 14px; text-align:right; color:#888; font-family:var(--mono);">~18,000</td>
+            <td style="padding:12px 14px; text-align:right; color:#f0a500; font-family:var(--mono);">$0.030–$0.090</td>
+            <td style="padding:12px 14px; text-align:right; color:#888; font-family:var(--mono);">~220–650</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 14px; color:var(--text);" data-i18n="cost-row3-task">Page translation</td>
+            <td style="padding:12px 14px; text-align:right; color:#888; font-family:var(--mono);">~42,000</td>
+            <td style="padding:12px 14px; text-align:right; color:#e05252; font-family:var(--mono);">$0.150–$0.400</td>
+            <td style="padding:12px 14px; text-align:right; color:#888; font-family:var(--mono);">~50–130</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- ── Security ── -->
     <h2 id="security" data-i18n="h2-security">Security considerations</h2>
     <p data-i18n="security-intro">
@@ -1335,6 +1424,18 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       'security-step3-title':'Review AI-generated custom code','security-step3-body':'If you ask the AI to insert a custom code widget or HTML block, review the output before publishing. AI-generated JavaScript should be treated as untrusted until inspected.',
       'security-step4-title':'Rotate the application password after testing','security-step4-body':'When a project is done or a session ends, revoke the application password from your WordPress profile and generate a new one for the next session.',
       'security-warn':'Application passwords grant API-level access to your site. Treat them like passwords: don\'t commit them to version control, don\'t share them, and revoke them when no longer needed.',
+      'sg-cost':'Cost &amp; Performance','sl-cost':'Cost estimates','toc-cost':'Cost estimates',
+      'h2-cost':'AI Cost Estimates',
+      'cost-intro':'These estimates are based on Claude Sonnet 4.6 pricing — <strong>$3.00&nbsp;/&nbsp;1M input</strong> · <strong>$15.00&nbsp;/&nbsp;1M output</strong> — and real session data from this workflow. Costs scale with page complexity and conversation length.',
+      'cost-callout':'<strong>Pricing snapshot — June 2026</strong><br/>Claude Sonnet 4.6: $3.00 / 1M input · $15.00 / 1M output. Run <code>/cost</code> in Claude Code to see your live session total.',
+      'h3-token-dist':'Token distribution — typical turn',
+      'cost-pie-desc':'Every turn loads the system prompt, accumulated conversation history, MCP tool results, and generates a response. The system prompt is the largest fixed cost — it is paid on every message.',
+      'h3-cost-task':'Cost per task type',
+      'cost-bar-desc':'A post/page query is the cheapest operation — mostly read-only with a small JSON response. Layout fixes involve multiple sequential tool calls. Full page translation is the most expensive, requiring a large page-structure read, LLM processing, and widget-by-widget updates.',
+      'h3-runs-budget':'Runs achievable per budget',
+      'cost-line-desc':'How many operations you can complete at various spend levels. Post queries go furthest; translations consume budget roughly 12× faster than queries.',
+      'cost-th-task':'Task','cost-th-tokens':'Avg tokens','cost-th-cost':'Cost / run','cost-th-runs':'Runs / $20',
+      'cost-row1-task':'Post / page query','cost-row2-task':'Layout fix','cost-row3-task':'Page translation',
       'footer-updated':'Last updated: May 2026','footer-edit':'Edit this page ↗',
       'sg-slytranslate':'SlyTranslate',
       'sl-sly-overview':'Overview','sl-sly-changelog':'v1.9.0-beta.2 changelog',
@@ -1421,6 +1522,18 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       'security-step3-title':'KI-generierten Code prüfen','security-step3-body':'Wenn Sie die KI bitten, ein benutzerdefiniertes Code-Widget oder einen HTML-Block einzufügen, prüfen Sie die Ausgabe vor der Veröffentlichung. KI-generiertes JavaScript sollte als nicht vertrauenswürdig behandelt werden, bis es geprüft wurde.',
       'security-step4-title':'Anwendungspasswort nach dem Testen rotieren','security-step4-body':'Wenn ein Projekt abgeschlossen ist oder eine Sitzung endet, widerrufen Sie das Anwendungspasswort in Ihrem WordPress-Profil und generieren Sie für die nächste Sitzung ein neues.',
       'security-warn':'Anwendungspasswörter gewähren API-Level-Zugriff auf Ihre Website. Behandeln Sie sie wie Passwörter: Fügen Sie sie nicht in die Versionskontrolle ein, geben Sie sie nicht weiter und widerrufen Sie sie, wenn sie nicht mehr benötigt werden.',
+      'sg-cost':'Kosten &amp; Leistung','sl-cost':'Kostenübersicht','toc-cost':'Kostenübersicht',
+      'h2-cost':'KI-Kostenübersicht',
+      'cost-intro':'Diese Schätzungen basieren auf den Claude Sonnet 4.6-Preisen — <strong>$3,00&nbsp;/&nbsp;1M Eingabe</strong> · <strong>$15,00&nbsp;/&nbsp;1M Ausgabe</strong> — und realen Sitzungsdaten aus diesem Workflow. Die Kosten skalieren mit der Seitenkomplexität und der Gesprächslänge.',
+      'cost-callout':'<strong>Preisübersicht — Juni 2026</strong><br/>Claude Sonnet 4.6: $3,00 / 1M Eingabe · $15,00 / 1M Ausgabe. Führen Sie <code>/cost</code> in Claude Code aus, um Ihren aktuellen Sitzungsgesamtbetrag zu sehen.',
+      'h3-token-dist':'Token-Verteilung — typischer Gesprächszug',
+      'cost-pie-desc':'Jeder Gesprächszug lädt die System-Eingabeaufforderung, den angesammelten Gesprächsverlauf, MCP-Tool-Ergebnisse und generiert eine Antwort. Die System-Eingabeaufforderung ist der größte Fixkostentreiber — sie wird bei jeder Nachricht bezahlt.',
+      'h3-cost-task':'Kosten pro Aufgabentyp',
+      'cost-bar-desc':'Eine Beitrags-/Seitenabfrage ist die günstigste Operation — hauptsächlich lesend mit einer kleinen JSON-Antwort. Layout-Korrekturen umfassen mehrere aufeinanderfolgende Tool-Aufrufe. Die vollständige Seitenübersetzung ist am teuersten und erfordert das Lesen einer großen Seitenstruktur, LLM-Verarbeitung und Widget-für-Widget-Aktualisierungen.',
+      'h3-runs-budget':'Ausführungen pro Budget',
+      'cost-line-desc':'Wie viele Operationen Sie bei verschiedenen Ausgabeniveaus durchführen können. Abfragen gehen am weitesten; Übersetzungen verbrauchen das Budget ca. 12× schneller als Abfragen.',
+      'cost-th-task':'Aufgabe','cost-th-tokens':'Durchschn. Tokens','cost-th-cost':'Kosten / Ausführung','cost-th-runs':'Ausführungen / 20 $',
+      'cost-row1-task':'Beitrags-/Seitenabfrage','cost-row2-task':'Layout-Korrektur','cost-row3-task':'Seitenübersetzung',
       'footer-updated':'Zuletzt aktualisiert: Mai 2026','footer-edit':'Seite bearbeiten ↗',
       'sg-slytranslate':'SlyTranslate',
       'sl-sly-overview':'Übersicht','sl-sly-changelog':'v1.9.0-beta.2 Changelog',
@@ -1470,6 +1583,211 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
   document.querySelectorAll('.lang-btn').forEach(btn =>
     btn.addEventListener('click', () => applyLang(btn.dataset.lang))
   );
+
+  // ── Cost Estimate Charts ──
+  (function () {
+    const tooltipDefaults = {
+      backgroundColor: '#161622',
+      borderColor: '#2a2a3a',
+      borderWidth: 1,
+      titleColor: '#e8e8f0',
+      bodyColor: '#8888aa',
+      padding: 10
+    };
+
+    // Pie / doughnut — token distribution
+    const pieCtx = document.getElementById('pieChart');
+    if (pieCtx) {
+      const pieColors = ['#088c9e', '#4040b8', '#f0a500', '#07947f'];
+      const pieData = [4200, 2800, 3200, 1800];
+      const pieLabels = ['System prompt', 'Conversation history', 'MCP tool results', 'Output'];
+      const pieTotal = pieData.reduce((a, b) => a + b, 0);
+
+      new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+          labels: pieLabels,
+          datasets: [{
+            data: pieData,
+            backgroundColor: pieColors,
+            borderColor: '#161622',
+            borderWidth: 3,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          cutout: '62%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              ...tooltipDefaults,
+              callbacks: {
+                label: ctx => {
+                  const pct = ((ctx.parsed / pieTotal) * 100).toFixed(0);
+                  return ' ' + ctx.parsed.toLocaleString() + ' tokens (' + pct + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+
+      const legend = document.getElementById('pieLegend');
+      if (legend) {
+        pieLabels.forEach((label, i) => {
+          const pct = ((pieData[i] / pieTotal) * 100).toFixed(0);
+          const div = document.createElement('div');
+          div.style.cssText = 'display:flex;align-items:center;gap:10px;';
+          div.innerHTML =
+            '<span style="width:12px;height:12px;border-radius:3px;background:' + pieColors[i] + ';flex-shrink:0;"></span>' +
+            '<div>' +
+              '<div style="color:#e8e8f0;font-size:13px;">' + label + '</div>' +
+              '<div style="color:#8888aa;font-size:12px;font-family:var(--mono);">' + pieData[i].toLocaleString() + ' tokens · ' + pct + '%</div>' +
+            '</div>';
+          legend.appendChild(div);
+        });
+      }
+    }
+
+    // Bar chart — cost per task type (min / avg / max)
+    const barCtx = document.getElementById('barChart');
+    if (barCtx) {
+      new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Post / Page Query', 'Layout Fix', 'Page Translation'],
+          datasets: [
+            {
+              label: 'Min cost',
+              data: [0.015, 0.030, 0.150],
+              backgroundColor: 'rgba(8,140,158,0.55)',
+              borderColor: '#088c9e',
+              borderWidth: 1,
+              borderRadius: 4
+            },
+            {
+              label: 'Avg cost',
+              data: [0.022, 0.055, 0.260],
+              backgroundColor: 'rgba(7,148,127,0.75)',
+              borderColor: '#07947f',
+              borderWidth: 1,
+              borderRadius: 4
+            },
+            {
+              label: 'Max cost',
+              data: [0.035, 0.090, 0.400],
+              backgroundColor: 'rgba(240,165,0,0.55)',
+              borderColor: '#f0a500',
+              borderWidth: 1,
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              grid: { color: '#2a2a3a' },
+              ticks: { color: '#8888aa' },
+              border: { color: '#2a2a3a' }
+            },
+            y: {
+              grid: { color: '#2a2a3a' },
+              ticks: { color: '#8888aa', callback: v => '$' + v.toFixed(3) },
+              border: { color: '#2a2a3a' },
+              title: { display: true, text: 'Cost (USD)', color: '#555' }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#8888aa', boxWidth: 12, font: { size: 12 } } },
+            tooltip: {
+              ...tooltipDefaults,
+              callbacks: { label: ctx => ' ' + ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(3) }
+            }
+          }
+        }
+      });
+    }
+
+    // Line chart — runs achievable per budget
+    const lineCtx = document.getElementById('lineChart');
+    if (lineCtx) {
+      const budgetLabels = ['$5', '$10', '$20', '$50', '$100'];
+      const budgetVals = [5, 10, 20, 50, 100];
+      new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: budgetLabels,
+          datasets: [
+            {
+              label: 'Post / Page Query ($0.022 avg)',
+              data: budgetVals.map(b => Math.floor(b / 0.022)),
+              borderColor: '#088c9e',
+              backgroundColor: 'rgba(8,140,158,0.08)',
+              tension: 0.35,
+              fill: true,
+              pointBackgroundColor: '#088c9e',
+              pointRadius: 5,
+              pointHoverRadius: 7
+            },
+            {
+              label: 'Layout Fix ($0.055 avg)',
+              data: budgetVals.map(b => Math.floor(b / 0.055)),
+              borderColor: '#f0a500',
+              backgroundColor: 'rgba(240,165,0,0.08)',
+              tension: 0.35,
+              fill: true,
+              pointBackgroundColor: '#f0a500',
+              pointRadius: 5,
+              pointHoverRadius: 7
+            },
+            {
+              label: 'Page Translation ($0.260 avg)',
+              data: budgetVals.map(b => Math.floor(b / 0.260)),
+              borderColor: '#e05252',
+              backgroundColor: 'rgba(224,82,82,0.08)',
+              tension: 0.35,
+              fill: true,
+              pointBackgroundColor: '#e05252',
+              pointRadius: 5,
+              pointHoverRadius: 7
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              grid: { color: '#2a2a3a' },
+              ticks: { color: '#8888aa' },
+              border: { color: '#2a2a3a' },
+              title: { display: true, text: 'Budget (USD)', color: '#555' }
+            },
+            y: {
+              grid: { color: '#2a2a3a' },
+              ticks: { color: '#8888aa' },
+              border: { color: '#2a2a3a' },
+              title: { display: true, text: 'Number of runs', color: '#555' }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#8888aa', boxWidth: 12, font: { size: 12 } } },
+            tooltip: {
+              ...tooltipDefaults,
+              callbacks: {
+                label: ctx => {
+                  const name = ctx.dataset.label.split('(')[0].trim();
+                  return ' ' + name + ': ' + ctx.parsed.y.toLocaleString() + ' runs';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  })();
 </script>
 
 </body>
