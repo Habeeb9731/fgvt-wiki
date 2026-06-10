@@ -576,10 +576,74 @@
       h2 { font-size: 17px; }
       .callout { flex-direction: column; gap: 8px; }
     }
+
+    /* ── Auth gate ── */
+    #auth-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      font-family: var(--font);
+    }
+    html.auth-locked body > *:not(#auth-overlay) { visibility: hidden; pointer-events: none; }
+    html.auth-locked #auth-overlay { display: flex; }
+    #auth-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: var(--font);
+      outline: none;
+    }
+    #auth-input:focus { border-color: #555; }
+    #auth-submit {
+      width: 100%;
+      padding: 10px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: background .15s;
+    }
+    #auth-submit:hover { background: var(--accent-hover); }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    (function(){
+      try {
+        var s = JSON.parse(localStorage.getItem('fgvt_auth'));
+        if (s && Date.now() < s.expires) return;
+      } catch(e) {}
+      document.documentElement.classList.add('auth-locked');
+    })();
+  </script>
 </head>
 <body>
+
+<!-- ── Auth overlay ── -->
+<div id="auth-overlay">
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8888aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+  </svg>
+  <div style="font-size:18px; font-weight:600; color:var(--text); letter-spacing:.2px;">FGVT Documentation</div>
+  <div style="font-size:13px; color:var(--text-muted); margin-top:-6px;">Enter password to continue</div>
+  <form id="auth-form" style="display:flex; flex-direction:column; gap:10px; width:270px; margin-top:4px;">
+    <input id="auth-input" type="password" placeholder="Password" autocomplete="current-password" />
+    <button id="auth-submit" type="submit">Unlock</button>
+    <div id="auth-error" style="color:#e05252; font-size:13px; text-align:center; display:none;">Incorrect password — try again.</div>
+  </form>
+</div>
 
 <!-- ── Sidebar overlay ── -->
 <div class="sidebar-overlay" id="overlay"></div>
@@ -1819,6 +1883,33 @@ After completing edits or translations, provide the wp-admin edit link.</code></
         }
       });
     }
+  })();
+</script>
+
+<script>
+  // ── Auth gate form handler ──
+  (function() {
+    const HASH = 'f9e748a3e77b6418fabe5120d8d1beefbfad5867129fc709b8547be489fbabea';
+    const KEY = 'fgvt_auth';
+    const TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+    const form = document.getElementById('auth-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const pw = document.getElementById('auth-input').value;
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+      const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      if (hex === HASH) {
+        localStorage.setItem(KEY, JSON.stringify({ expires: Date.now() + TTL }));
+        document.documentElement.classList.remove('auth-locked');
+      } else {
+        document.getElementById('auth-error').style.display = 'block';
+        document.getElementById('auth-input').value = '';
+        document.getElementById('auth-input').focus();
+      }
+    });
   })();
 </script>
 
