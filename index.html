@@ -647,6 +647,10 @@
       <a href="#slytranslate-changelog" data-i18n="sl-sly-changelog">v1.9.0-beta.2 changelog</a>
       <a href="#translate-video" data-i18n="sl-translate-video">Translate with Claude AI</a>
     </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Project</div>
+      <a href="#project-instructions">Project Instructions</a>
+    </div>
   </aside>
 
   <!-- ── Main content ── -->
@@ -697,6 +701,7 @@
       <a href="#slytranslate" data-i18n="toc-sly-overview">SlyTranslate</a>
       <a href="#slytranslate-changelog" data-i18n="toc-sly-changelog">v1.9.0-beta.2</a>
       <a href="#translate-video" data-i18n="toc-translate-video">Translate with Claude AI</a>
+      <a href="#project-instructions">Project Instructions</a>
     </div>
 
     <div class="clearfix">
@@ -1289,6 +1294,43 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
     <video controls style="width:100%; border-radius:12px; border:1px solid var(--border); margin-bottom:8px; display:block;">
       <source src="images/Translate_Using_ClaudeAI.mp4" type="video/mp4">
     </video>
+
+    <!-- ── Project Instructions ── -->
+    <h2 id="project-instructions">Project Instructions</h2>
+    <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">Copy this block and paste it as a system prompt or project context when starting a new AI session on this site.</p>
+
+    <div class="code-header">
+      <span>text &nbsp; FGVT project context</span>
+      <button id="copy-project-btn" style="background:none;border:none;cursor:pointer;opacity:.6;color:inherit;font-family:inherit;font-size:inherit;padding:0;" onclick="var b=this;navigator.clipboard.writeText(document.getElementById('project-instructions-code').textContent).then(function(){b.textContent='copied!';setTimeout(function(){b.textContent='copy'},2000)})">copy</button>
+    </div>
+    <pre style="white-space:pre-wrap;"><code id="project-instructions-code">Project: FGVT WordPress Site (Elementor + slytranslate)
+This project manages the website of the Forschungsgruppe Verkehrstelematik (FGVT), a German research group focused on connected mobility / ITS. The WordPress site runs on a staging server at http://172.19.1.93 and is built with Elementor, managed via the elementor-mcp connector. Translations are handled via the slytranslate MCP.
+
+Site facts
+
+Primary language is German; English translations are being added incrementally.
+Key pages: Home (1564), Home - Deutsch (4792), About (1565), Projekte (2464), press (7275), publications (4271). There are ~98 Elementor pages/posts including many project pages and a news/blog section.
+The site contains known cleanup debt: duplicate pages (kit2rad, FlowPro, TERMINAL, Project_Template_Slider copies), generically named pages ("Elementor #4537"), and old/_old/_Test variants. Confirm before deleting anything.
+Media URLs are hardcoded to http://172.19.1.93 — flag this whenever relevant; it must be search-replaced before go-live.
+
+Elementor conventions
+
+When asked to assess or edit a page, fetch its structure first with get-page-structure; reference elements by their IDs.
+Watch for and flag: leftover English template labels in headings on German pages, empty image alt text, hardcoded &lt;br&gt; in headings, mixed legacy Sections/Columns vs. flexbox Containers, and the mixed widget ecosystems in use (Royal Addons wpr-, Essential Addons eael-, core Elementor).
+Prefer modern flexbox Containers for new layouts.
+
+Translation workflow (slytranslate)
+
+Whenever a translation request is made, always call the slytranslate MCP — do not translate post/page content manually outside of it.
+Default direction: German → English. Before translating, call get-translation-status for the post.
+The site runs in single-entry mode: translations are stored as language variants on the same post ID, not as sibling posts.
+The server-side translation runtime has no AI models configured (translate-content fails with "No models found"). Use the client-side flow instead: prepare-client-translation → translate the units → apply-client-translation. Note the prepare/apply abilities require source_post_id (not post_id).
+Translation style: keep project names (Gaia-X 4 MoveID, AGEDA, Physical Internet, etc.) and people's names untranslated; render institution names in their official English form (e.g. "Hochschule Hamm-Lippstadt" → "Hamm-Lippstadt University of Applied Sciences"); "Impulsvortrag" → "keynote talk"; dates in the format "22 October 2025"; tone: professional but warm, suitable for a research group's news posts.
+
+General
+
+Users typically reference content by post/page ID; resolve IDs against the site via list-pages when unsure.
+After completing edits or translations, provide the wp-admin edit link.</code></pre>
 
     <div style="margin-top: 60px; padding-top: 28px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-dim);">
       <span data-i18n="footer-updated">Last updated: May 2026</span>
