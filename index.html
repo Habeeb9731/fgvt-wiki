@@ -625,6 +625,7 @@
       <div class="sidebar-group-label" data-i18n="sg-connectai">Connect your AI</div>
       <a href="#antigravity" data-i18n="sl-antigravity">Antigravity</a>
       <a href="#claude-code" data-i18n="sl-claudecode">Claude Code</a>
+      <a href="#claude-desktop" data-i18n="sl-claudedesktop">Claude Desktop</a>
       <a href="#other-tools" data-i18n="sl-othertools">Other MCP tools</a>
     </div>
     <div class="sidebar-group">
@@ -690,6 +691,7 @@
       <a href="#generate-config" data-i18n="toc-genconfig">Generate config</a>
       <a href="#antigravity" data-i18n="toc-antigravity">Antigravity setup</a>
       <a href="#claude-code" data-i18n="toc-claudecode">Claude Code setup</a>
+      <a href="#claude-desktop" data-i18n="toc-claudedesktop">Claude Desktop setup</a>
       <a href="#prompting" data-i18n="toc-prompting">Effective prompts</a>
       <a href="#what-it-can-do" data-i18n="toc-whatitcando">What AI can control</a>
       <a href="#cost-estimates" data-i18n="toc-cost">Cost estimates</a>
@@ -952,6 +954,37 @@
       Once connected, Claude Code can call any of the Elementor MCP tools — list pages, inspect layouts,
       create containers, update widgets, and more.
     </p>
+
+    <!-- ── Claude Desktop ── -->
+    <h2 id="claude-desktop" data-i18n="h2-claudedesktop">Adding MCP to Claude Desktop</h2>
+    <p data-i18n="claudedesktop-intro">Copy this snippet and follow the video instructions to add the Elementor MCP and SlyTranslate servers to your Claude Desktop configuration.</p>
+
+    <div class="code-header">
+      <span>json &nbsp; claude_desktop_config.json</span>
+      <button id="copy-desktop-btn" style="background:none;border:none;cursor:pointer;opacity:.6;color:inherit;font-family:inherit;font-size:inherit;padding:0;" onclick="var b=this;navigator.clipboard.writeText(document.getElementById('desktop-config-code').textContent).then(function(){b.textContent='copied!';setTimeout(function(){b.textContent='copy'},2000)})">copy</button>
+    </div>
+    <pre><code id="desktop-config-code"><span class="key">"elementor-mcp"</span>: {
+  <span class="key">"command"</span>: <span class="str">"npx"</span>,
+  <span class="key">"args"</span>: [
+    <span class="str">"-y"</span>,
+    <span class="str">"mcp-remote"</span>,
+    <span class="str">"http://172.19.1.93/wp-json/mcp/elementor-mcp-server"</span>,
+    <span class="str">"--allow-http"</span>,
+    <span class="str">"--header"</span>,
+    <span class="str">"Authorization: Basic replace_me"</span>
+  ]
+},
+<span class="key">"slytranslate"</span>: {
+  <span class="key">"command"</span>: <span class="str">"npx"</span>,
+  <span class="key">"args"</span>: [
+    <span class="str">"-y"</span>,
+    <span class="str">"mcp-remote"</span>,
+    <span class="str">"http://172.19.1.93/wp-json/mcp/mcp-adapter-default-server"</span>,
+    <span class="str">"--allow-http"</span>,
+    <span class="str">"--header"</span>,
+    <span class="str">"Authorization: Basic replace_me"</span>
+  ]
+}</code></pre>
 
     <!-- ── Other tools ── -->
     <h2 id="other-tools" data-i18n="h2-othertools">Other MCP-compatible clients</h2>
@@ -1368,11 +1401,11 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
     en: {
       'nav-home':'Home','nav-guides':'Guides','nav-plugins':'Plugins','nav-resources':'Resources',
       'sg-getstarted':'Get started','sg-setup':'Setup','sg-connectai':'Connect your AI','sg-using':'Using Elementor MCP','sg-security':'Security',
-      'sl-overview':'Overview','sl-prerequisites':'Prerequisites','sl-quickstart':'Quickstart','sl-install':'Install plugins','sl-apppassword':'Application password','sl-genconfig':'Generate config','sl-antigravity':'Antigravity','sl-claudecode':'Claude Code','sl-othertools':'Other MCP tools','sl-prompting':'Writing effective prompts','sl-whatitcando':'What AI can control','sl-iterate':'Iterating on results','sl-security':'Security considerations',
+      'sl-overview':'Overview','sl-prerequisites':'Prerequisites','sl-quickstart':'Quickstart','sl-install':'Install plugins','sl-apppassword':'Application password','sl-genconfig':'Generate config','sl-antigravity':'Antigravity','sl-claudecode':'Claude Code','sl-claudedesktop':'Claude Desktop','sl-othertools':'Other MCP tools','sl-prompting':'Writing effective prompts','sl-whatitcando':'What AI can control','sl-iterate':'Iterating on results','sl-security':'Security considerations',
       'hero-breadcrumb':'GUIDES &nbsp;/&nbsp; ELEMENTOR MCP','hero-title':'Connect AI to WordPress',
       'hero-intro':'Elementor MCP lets your AI directly control your WordPress site — creating pages, updating layouts, swapping widgets, and rebuilding sections — without manual drag-and-drop. This guide walks you through setup, configuration, and getting the most out of AI-driven page building.',
       'hero-watch':'Watch on YouTube',
-      'h2-overview':'Overview','toc-title':'On this page','toc-overview':'Overview','toc-prerequisites':'Prerequisites','toc-install':'Install plugins','toc-apppassword':'Application password','toc-genconfig':'Generate config','toc-antigravity':'Antigravity setup','toc-claudecode':'Claude Code setup','toc-prompting':'Effective prompts','toc-whatitcando':'What AI can control','toc-security':'Security',
+      'h2-overview':'Overview','toc-title':'On this page','toc-overview':'Overview','toc-prerequisites':'Prerequisites','toc-install':'Install plugins','toc-apppassword':'Application password','toc-genconfig':'Generate config','toc-antigravity':'Antigravity setup','toc-claudecode':'Claude Code setup','toc-claudedesktop':'Claude Desktop setup','toc-prompting':'Effective prompts','toc-whatitcando':'What AI can control','toc-security':'Security',
       'overview-p1':'Standard AI integrations with Elementor are limited to generating copy or suggesting layout ideas. The output is text — you still have to drag, drop, and wire everything yourself. <strong>Elementor MCP changes that.</strong>',
       'overview-p2':'MCP (Model Context Protocol) is an open standard that lets AI models call tools exposed by external servers. With the Elementor MCP plugin, your AI client can directly invoke Elementor\'s builder — creating pages, moving sections, updating widget settings, and applying styles — as structured API calls, not chat suggestions.',
       'overview-callout':'<strong>What\'s new about this approach</strong><br />Instead of copying AI-generated HTML into Elementor, your AI <em>controls Elementor directly</em>. It can list pages, inspect structures, modify containers, and rebuild entire landing pages in a single prompt session.',
@@ -1404,6 +1437,7 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       'antigravity-step3-title':'Refresh and enable tools','antigravity-step3-body':'Click Refresh. Antigravity will pull in the available Elementor MCP tools. You can enable or disable individual tools from the tools panel.',
       'h2-claudecode':'Connect with Claude Code','claudecode-intro':'Claude Code reads MCP server definitions from a JSON config file. Paste the Elementor MCP config into your <code>mcp_config.json</code> (or your project\'s <code>.claude/mcp.json</code>), then restart the editor.',
       'claudecode-after':'After saving, restart Claude Code and run:','claudecode-connected':'Once connected, Claude Code can call any of the Elementor MCP tools — list pages, inspect layouts, create containers, update widgets, and more.',
+      'h2-claudedesktop':'Adding MCP to Claude Desktop','claudedesktop-intro':'Copy this snippet and follow the video instructions to add the Elementor MCP and SlyTranslate servers to your Claude Desktop configuration.',
       'h2-othertools':'Other MCP-compatible clients','othertools-intro':'Any tool that supports the Model Context Protocol can connect. The pattern is always the same: add the MCP server config, restart the client, and confirm the tools load.',
       'card-cursor-desc':'Add the config to <code>.cursor/mcp.json</code> in your project root.',
       'card-windsurf-desc':'Use the MCP panel under Settings → AI Tools → Servers.',
@@ -1466,11 +1500,11 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
     de: {
       'nav-home':'Startseite','nav-guides':'Anleitungen','nav-plugins':'Plugins','nav-resources':'Ressourcen',
       'sg-getstarted':'Erste Schritte','sg-setup':'Einrichtung','sg-connectai':'KI verbinden','sg-using':'Elementor MCP nutzen','sg-security':'Sicherheit',
-      'sl-overview':'Übersicht','sl-prerequisites':'Voraussetzungen','sl-quickstart':'Schnellstart','sl-install':'Plugins installieren','sl-apppassword':'Anwendungspasswort','sl-genconfig':'Konfiguration erstellen','sl-antigravity':'Antigravity','sl-claudecode':'Claude Code','sl-othertools':'Andere MCP-Tools','sl-prompting':'Effektive Prompts schreiben','sl-whatitcando':'Was KI steuern kann','sl-iterate':'Ergebnisse verfeinern','sl-security':'Sicherheitshinweise',
+      'sl-overview':'Übersicht','sl-prerequisites':'Voraussetzungen','sl-quickstart':'Schnellstart','sl-install':'Plugins installieren','sl-apppassword':'Anwendungspasswort','sl-genconfig':'Konfiguration erstellen','sl-antigravity':'Antigravity','sl-claudecode':'Claude Code','sl-claudedesktop':'Claude Desktop','sl-othertools':'Andere MCP-Tools','sl-prompting':'Effektive Prompts schreiben','sl-whatitcando':'Was KI steuern kann','sl-iterate':'Ergebnisse verfeinern','sl-security':'Sicherheitshinweise',
       'hero-breadcrumb':'ANLEITUNGEN &nbsp;/&nbsp; ELEMENTOR MCP','hero-title':'KI mit WordPress verbinden',
       'hero-intro':'Elementor MCP ermöglicht es Ihrer KI, Ihre WordPress-Website direkt zu steuern — Seiten erstellen, Layouts aktualisieren, Widgets tauschen und Abschnitte neu aufbauen — ganz ohne manuelles Drag-and-Drop. Diese Anleitung führt Sie durch Einrichtung, Konfiguration und die optimale Nutzung des KI-gestützten Seitenaufbaus.',
       'hero-watch':'Auf YouTube ansehen',
-      'h2-overview':'Übersicht','toc-title':'Auf dieser Seite','toc-overview':'Übersicht','toc-prerequisites':'Voraussetzungen','toc-install':'Plugins installieren','toc-apppassword':'Anwendungspasswort','toc-genconfig':'Konfiguration erstellen','toc-antigravity':'Antigravity-Einrichtung','toc-claudecode':'Claude Code-Einrichtung','toc-prompting':'Effektive Prompts','toc-whatitcando':'Was KI steuern kann','toc-security':'Sicherheit',
+      'h2-overview':'Übersicht','toc-title':'Auf dieser Seite','toc-overview':'Übersicht','toc-prerequisites':'Voraussetzungen','toc-install':'Plugins installieren','toc-apppassword':'Anwendungspasswort','toc-genconfig':'Konfiguration erstellen','toc-antigravity':'Antigravity-Einrichtung','toc-claudecode':'Claude Code-Einrichtung','toc-claudedesktop':'Claude Desktop-Einrichtung','toc-prompting':'Effektive Prompts','toc-whatitcando':'Was KI steuern kann','toc-security':'Sicherheit',
       'overview-p1':'Standard-KI-Integrationen mit Elementor beschränken sich auf die Generierung von Texten oder das Vorschlagen von Layout-Ideen. Das Ergebnis ist Text — Sie müssen alles noch selbst per Drag-and-Drop zusammensetzen. <strong>Elementor MCP ändert das.</strong>',
       'overview-p2':'MCP (Model Context Protocol) ist ein offener Standard, der es KI-Modellen ermöglicht, von externen Servern bereitgestellte Werkzeuge aufzurufen. Mit dem Elementor-MCP-Plugin kann Ihr KI-Client Elementors Builder direkt steuern — Seiten erstellen, Abschnitte verschieben, Widget-Einstellungen aktualisieren und Stile anwenden — als strukturierte API-Aufrufe, nicht als Chat-Vorschläge.',
       'overview-callout':'<strong>Was an diesem Ansatz neu ist</strong><br />Anstatt KI-generierten HTML-Code in Elementor einzufügen, <em>steuert Ihre KI Elementor direkt</em>. Sie kann Seiten auflisten, Strukturen prüfen, Container anpassen und ganze Landingpages in einer einzigen Prompt-Sitzung neu aufbauen.',
@@ -1502,6 +1536,7 @@ ai-translate/apply-client-translation-bulk    <span class="cmt"># bulk persist t
       'antigravity-step3-title':'Aktualisieren und Tools aktivieren','antigravity-step3-body':'Klicken Sie auf „Aktualisieren". Antigravity lädt die verfügbaren Elementor-MCP-Tools. Im Tools-Panel können Sie einzelne Tools aktivieren oder deaktivieren.',
       'h2-claudecode':'Mit Claude Code verbinden','claudecode-intro':'Claude Code liest MCP-Server-Definitionen aus einer JSON-Konfigurationsdatei. Fügen Sie die Elementor-MCP-Konfiguration in Ihre <code>mcp_config.json</code> (oder die <code>.claude/mcp.json</code> Ihres Projekts) ein und starten Sie den Editor neu.',
       'claudecode-after':'Starten Sie nach dem Speichern Claude Code neu und führen Sie aus:','claudecode-connected':'Nach der Verbindung kann Claude Code alle Elementor-MCP-Tools aufrufen — Seiten auflisten, Layouts prüfen, Container erstellen, Widgets aktualisieren und mehr.',
+      'h2-claudedesktop':'MCP zu Claude Desktop hinzufügen','claudedesktop-intro':'Kopieren Sie diesen Ausschnitt und folgen Sie den Videoanweisungen, um die Elementor-MCP- und SlyTranslate-Server zu Ihrer Claude-Desktop-Konfiguration hinzuzufügen.',
       'h2-othertools':'Andere MCP-kompatible Clients','othertools-intro':'Jedes Tool, das das Model Context Protocol unterstützt, kann sich verbinden. Das Muster ist immer gleich: MCP-Server-Konfiguration hinzufügen, Client neu starten und prüfen, ob die Tools geladen werden.',
       'card-cursor-desc':'Fügen Sie die Konfiguration in <code>.cursor/mcp.json</code> im Projektstamm ein.',
       'card-windsurf-desc':'Verwenden Sie das MCP-Panel unter Einstellungen → KI-Tools → Server.',
